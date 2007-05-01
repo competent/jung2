@@ -5,9 +5,12 @@
   <artifactId>jung-samples</artifactId>
   <packaging>jar</packaging>
   <version>2.0a</version>
-  <url>http://maven.apache.org</url>
+  <url>http://jung.sourceforge.net/site/jung-samples</url>
   <name>jung-samples</name>
-  
+  <description>
+  Sample programs using jung2. Nearly all jung2 capabilities are demonstrated here.
+  Please study the source code for these examples prior to asking how to do something.
+  </description>
   <parent>
     <groupId>jung.app</groupId>
     <artifactId>app</artifactId>
@@ -75,13 +78,6 @@
   	<dependency>
 		<groupId>jung</groupId>
 		<artifactId>jung-visualization</artifactId>
-		<version>2.0a</version>
-		<scope>compile</scope>
-	</dependency>
-	
-  	<dependency>
-		<groupId>jung</groupId>
-		<artifactId>jung-awt-rendering</artifactId>
 		<version>2.0a</version>
 		<scope>compile</scope>
 	</dependency>

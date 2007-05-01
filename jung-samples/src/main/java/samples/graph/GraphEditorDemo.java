@@ -34,6 +34,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.TransformerUtils;
@@ -44,9 +45,9 @@ import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
+import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.annotations.AnnotationControls;
-import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
-import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.EditingModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
@@ -80,9 +81,7 @@ public class GraphEditorDemo extends JApplet implements Printable {
     /**
      * the visual component and renderer for the graph
      */
-    VisualizationComponent<Number,Number> vv;
-    
-    Map<Number,Point2D> vertexLocations = new HashMap<Number,Point2D>();
+    VisualizationViewer<Number,Number> vv;
     
     String instructions =
         "<html>"+
@@ -143,10 +142,9 @@ public class GraphEditorDemo extends JApplet implements Printable {
         graph = new SparseMultigraph<Number,Number>();
 
         this.layout = new StaticLayout<Number,Number>(graph, 
-        	TransformerUtils.mapTransformer(vertexLocations),
         	new Dimension(600,600));
         
-        vv =  new VisualizationComponent<Number,Number>(layout);
+        vv =  new VisualizationViewer<Number,Number>(layout);
         vv.setBackground(Color.white);
 
         vv.getRenderContext().setVertexLabelTransformer(MapTransformer.<Number,String>getInstance(
@@ -165,7 +163,7 @@ public class GraphEditorDemo extends JApplet implements Printable {
         Factory<Number> edgeFactory = new EdgeFactory();
         
         final EditingModalGraphMouse<Number,Number> graphMouse = 
-        	new EditingModalGraphMouse<Number,Number>(vv.getRenderContext(), vertexLocations, vertexFactory, edgeFactory);
+        	new EditingModalGraphMouse<Number,Number>(vv.getRenderContext(), layout, vertexFactory, edgeFactory);
         
         // the EditingGraphMouse will pass mouse event coordinates to the
         // vertexLocations function to set the locations of the vertices as
@@ -180,13 +178,13 @@ public class GraphEditorDemo extends JApplet implements Printable {
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv.getServer(), 1.1f, vv.getCenter());
+                scaler.scale(vv, 1.1f, vv.getCenter());
             }
         });
         JButton minus = new JButton("-");
         minus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv.getServer(), 1/1.1f, vv.getCenter());
+                scaler.scale(vv, 1/1.1f, vv.getCenter());
             }
         });
         
@@ -296,6 +294,7 @@ public class GraphEditorDemo extends JApplet implements Printable {
                         }
                     }
             }});
+        JPopupMenu.setDefaultLightWeightPopupEnabled(false);
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(menu);
         frame.setJMenuBar(menuBar);

@@ -10,6 +10,8 @@ package samples.graph;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -44,6 +46,7 @@ import edu.uci.ics.jung.graph.util.TestGraphs;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
+import edu.uci.ics.jung.visualization.control.SatelliteVisualizationViewer;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
 import edu.uci.ics.jung.visualization.layout.LayoutTransition;
@@ -58,7 +61,7 @@ import edu.uci.ics.jung.visualization.util.Animator;
  * @author Danyel Fisher
  * @author Joshua O'Madadhain
  */
-public class ShowLayouts extends JApplet {
+public class SatelliteShowLayouts extends JApplet {
     protected static Graph<? extends Object, ? extends Object>[] g_array;
     protected static int graph_index;
     protected static String[] graph_names = {"Two component graph", 
@@ -177,6 +180,13 @@ public class ShowLayouts extends JApplet {
         
         vv.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer(vv.getPickedVertexState(), Color.red, Color.yellow));
         
+        
+        final SatelliteVisualizationViewer vv2 = 
+            new SatelliteVisualizationViewer(vv, new Dimension(300,300));
+        ScalingControl vv2Scaler = new CrossoverScalingControl();
+        vv2.scaleToLayout(vv2Scaler);
+
+        
         final DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
         vv.setGraphMouse(graphMouse);
         
@@ -239,6 +249,12 @@ public class ShowLayouts extends JApplet {
         final JComboBox graph_chooser = new JComboBox(graph_names);
         
         graph_chooser.addActionListener(new GraphChooser(jcb));
+        
+        Container rightPanel = new JPanel(new GridLayout(2,1));
+        rightPanel.add(new JPanel());
+        rightPanel.add(vv2);
+        jp.add(rightPanel, BorderLayout.EAST);
+
         
         topControls.add(jcb);
         topControls.add(graph_chooser);

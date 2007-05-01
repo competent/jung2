@@ -12,27 +12,31 @@ package edu.uci.ics.jung.visualization;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Map;
 
 import edu.uci.ics.jung.algorithms.layout.Layout;
 
 
 @SuppressWarnings("serial")
 public class VisualizationImageServer<V,E> extends BasicVisualizationServer<V,E> {
-	protected Dimension preferredSize;
-	
+
+    Map renderingHints = new HashMap();
+    
     public VisualizationImageServer(Layout<V,E> layout, Dimension preferredSize) {
         super(layout, preferredSize);
-        this.preferredSize = preferredSize;
-//        addNotify();
+        setSize(preferredSize);
+        renderingHints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        addNotify();
     }
     
     public Image getImage(Point2D center, Dimension d) {
         
-            final int width = preferredSize.width;
-            final int height = preferredSize.height;
+            int width = getWidth();
+            int height = getHeight();
             
             float scalex = (float)width/d.width;
             float scaley = (float)height/d.height;
@@ -42,18 +46,8 @@ public class VisualizationImageServer<V,E> extends BasicVisualizationServer<V,E>
             BufferedImage bi = new BufferedImage(width, height,
                     BufferedImage.TYPE_INT_RGB);
             Graphics2D graphics = bi.createGraphics();
-            Graphics2DScreenDevice sd = new Graphics2DScreenDevice(graphics) {
-				@Override
-				public Rectangle getBounds() {
-					return new Rectangle(0, 0, width, height);
-				}
-
-				@Override
-				public Dimension getSize() {
-					return new Dimension(width, height);
-				}
-            };
-            renderGraph(sd, graphics);
+            graphics.setRenderingHints(renderingHints);
+            paint(graphics);
             graphics.dispose();
             return bi;
 

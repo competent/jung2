@@ -1,13 +1,18 @@
 package edu.uci.ics.jung.visualization.control;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;
-import java.util.Map;
+
+import javax.swing.JComponent;
 
 import org.apache.commons.collections15.Factory;
 
@@ -20,11 +25,6 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.visualization.ArrowFactory;
 import edu.uci.ics.jung.visualization.VisualizationServer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
-import edu.uci.ics.jung.visualization.cursor.Cursor;
-import edu.uci.ics.jung.visualization.event.Event;
-import edu.uci.ics.jung.visualization.event.MouseEvent;
-import edu.uci.ics.jung.visualization.event.MouseListener;
-import edu.uci.ics.jung.visualization.event.MouseMotionListener;
 
 /**
  * A plugin that can create vertices, undirected edges, and directed edges
@@ -36,7 +36,7 @@ import edu.uci.ics.jung.visualization.event.MouseMotionListener;
 public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin implements
     MouseListener, MouseMotionListener {
     
-    protected Map<V,Point2D> vertexLocations;
+    protected Layout<V,E> layout;
     protected V startVertex;
     protected Point2D down;
     
@@ -50,17 +50,17 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
     protected Factory<V> vertexFactory;
     protected Factory<E> edgeFactory;
     
-    public EditingGraphMousePlugin(Map<V,Point2D> vertexLocations, Factory<V> vertexFactory, Factory<E> edgeFactory) {
-        this(Event.BUTTON1_MASK, vertexLocations, vertexFactory, edgeFactory);
+    public EditingGraphMousePlugin(Layout<V,E> layout, Factory<V> vertexFactory, Factory<E> edgeFactory) {
+        this(MouseEvent.BUTTON1_MASK, layout, vertexFactory, edgeFactory);
     }
 
     /**
      * create instance and prepare shapes for visual effects
      * @param modifiers
      */
-    public EditingGraphMousePlugin(int modifiers, Map<V,Point2D> vertexLocations, Factory<V> vertexFactory, Factory<E> edgeFactory) {
+    public EditingGraphMousePlugin(int modifiers, Layout<V,E> layout, Factory<V> vertexFactory, Factory<E> edgeFactory) {
         super(modifiers);
-        this.vertexLocations = vertexLocations;
+        this.layout = layout;
         this.vertexFactory = vertexFactory;
         this.edgeFactory = edgeFactory;
         rawEdge.setCurve(0.0f, 0.0f, 0.33f, 100, .66f, -50,
@@ -68,15 +68,15 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
         rawArrowShape = ArrowFactory.getNotchedArrow(20, 16, 8);
         edgePaintable = new EdgePaintable();
         arrowPaintable = new ArrowPaintable();
-		this.cursor = new Cursor(Cursor.CROSSHAIR_CURSOR);
+		this.cursor = Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
     }
     
     /**
      * sets the vertex locations. Needed to place new vertices
      * @param vertexLocations
      */
-    public void setVertexLocations(Map<V,Point2D> vertexLocations) {
-        this.vertexLocations = vertexLocations;
+    public void setLayout(Layout<V,E> layout) {
+        this.layout = layout;
     }
     
     /**
@@ -99,9 +99,9 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
             final VisualizationViewer<V,E> vv =
                 (VisualizationViewer<V,E>)e.getSource();
             final Point2D p = e.getPoint();//vv.getRenderContext().getBasicTransformer().inverseViewTransform(e.getPoint());
-            GraphElementAccessor<V,E> pickSupport = vv.getServer().getPickSupport();
+            GraphElementAccessor<V,E> pickSupport = vv.getPickSupport();
             if(pickSupport != null) {
-            	Graph<V,E> graph = vv.getServer().getModel().getGraphLayout().getGraph();
+            	Graph<V,E> graph = vv.getModel().getGraphLayout().getGraph();
             	// set default edge type
             	if(graph instanceof DirectedGraph) {
             		edgeIsDirected = EdgeType.DIRECTED;
@@ -109,25 +109,25 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
             		edgeIsDirected = EdgeType.UNDIRECTED;
             	}
             	
-                final V vertex = pickSupport.getVertex(vv.getServer().getModel().getGraphLayout(), p.getX(), p.getY());
+                final V vertex = pickSupport.getVertex(vv.getModel().getGraphLayout(), p.getX(), p.getY());
                 if(vertex != null) { // get ready to make an edge
                     startVertex = vertex;
                     down = e.getPoint();
                     transformEdgeShape(down, down);
-                    vv.getServer().addPostRenderPaintable(edgePaintable);
-                    if((e.getModifiers() & Event.SHIFT_MASK) != 0
-                    		&& vv.getServer().getModel().getGraphLayout().getGraph() instanceof UndirectedGraph == false) {
+                    vv.addPostRenderPaintable(edgePaintable);
+                    if((e.getModifiers() & MouseEvent.SHIFT_MASK) != 0
+                    		&& vv.getModel().getGraphLayout().getGraph() instanceof UndirectedGraph == false) {
                         edgeIsDirected = EdgeType.DIRECTED;
                     }
                     if(edgeIsDirected == EdgeType.DIRECTED) {
                         transformArrowShape(down, e.getPoint());
-                        vv.getServer().addPostRenderPaintable(arrowPaintable);
+                        vv.addPostRenderPaintable(arrowPaintable);
                     }
                 } else { // make a new vertex
 
                     V newVertex = vertexFactory.create();
-                    vertexLocations.put(newVertex, vv.getRenderContext().getMultiLayerTransformer().inverseTransform(e.getPoint()));
-                    Layout<V,E> layout = vv.getServer().getModel().getGraphLayout();
+                    layout.setLocation(newVertex, vv.getRenderContext().getMultiLayerTransformer().inverseTransform(e.getPoint()));
+                    Layout<V,E> layout = vv.getModel().getGraphLayout();
                     for(V lockVertex : graph.getVertices()) {
                         layout.lock(lockVertex,true);
                     }
@@ -153,8 +153,8 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
             final VisualizationViewer<V,E> vv =
                 (VisualizationViewer<V,E>)e.getSource();
             final Point2D p = e.getPoint();//vv.getRenderContext().getBasicTransformer().inverseViewTransform(e.getPoint());
-            Layout<V,E> layout = vv.getServer().getModel().getGraphLayout();
-            GraphElementAccessor<V,E> pickSupport = vv.getServer().getPickSupport();
+            Layout<V,E> layout = vv.getModel().getGraphLayout();
+            GraphElementAccessor<V,E> pickSupport = vv.getPickSupport();
             if(pickSupport != null) {
                 final V vertex = pickSupport.getVertex(layout, p.getX(), p.getY());
                 if(vertex != null && startVertex != null) {
@@ -168,8 +168,8 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
             startVertex = null;
             down = null;
             edgeIsDirected = EdgeType.UNDIRECTED;
-            vv.getServer().removePostRenderPaintable(edgePaintable);
-            vv.getServer().removePostRenderPaintable(arrowPaintable);
+            vv.removePostRenderPaintable(edgePaintable);
+            vv.removePostRenderPaintable(arrowPaintable);
         }
     }
 
@@ -266,14 +266,12 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
     }
     public void mouseClicked(MouseEvent e) {}
     public void mouseEntered(MouseEvent e) {
-        VisualizationViewer c = (VisualizationViewer)e.getSource();
+        JComponent c = (JComponent)e.getSource();
         c.setCursor(cursor);
     }
     public void mouseExited(MouseEvent e) {
-    	VisualizationViewer c = (VisualizationViewer)e.getSource();
-        c.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        JComponent c = (JComponent)e.getSource();
+        c.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
     public void mouseMoved(MouseEvent e) {}
-
-	public void mouseDoubleClicked(MouseEvent mouseEvent) {}
 }

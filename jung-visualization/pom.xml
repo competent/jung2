@@ -5,9 +5,11 @@
   <artifactId>jung-visualization</artifactId>
   <packaging>jar</packaging>
   <version>2.0a</version>
-  <url>http://maven.apache.org</url>
+  <url>http://jung.sourceforge.net/site/jung-visualization</url>
   <name>jung-visualization</name>
-  
+  <description>
+  Core visualization support for the jung2 project
+  </description>
   <parent>
   	<groupId>jung.app</groupId>
     <artifactId>app</artifactId>
@@ -51,13 +53,6 @@
 		<version>2.0a</version>
 		<scope>test</scope>
 	</dependency>
-	
-    <dependency>
-      	<groupId>colt</groupId>
-      	<artifactId>colt</artifactId>
-      	<version>1.2.0</version>
-      	<scope>compile</scope>
-    </dependency>
 
   </dependencies>
 </project>
