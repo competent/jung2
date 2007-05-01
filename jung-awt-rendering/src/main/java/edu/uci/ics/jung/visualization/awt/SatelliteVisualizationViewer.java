@@ -28,8 +28,10 @@ import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationModel;
 import edu.uci.ics.jung.visualization.VisualizationServer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.awt.graphics.G2DGraphicsContext;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalSatelliteGraphMouse;
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
 import edu.uci.ics.jung.visualization.transform.MutableAffineTransformer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 import edu.uci.ics.jung.visualization.transform.shape.ShapeTransformer;
@@ -128,42 +130,44 @@ public class SatelliteVisualizationViewer<V, E>
     }
     
     protected void paintComponent(Graphics g) {
-    	renderGraph(screenDevice, (Graphics2D)g);
+    	((Graphics2D)g).setRenderingHints(renderingHints);
+    	GraphicsContext graphicsContext = new G2DGraphicsContext((Graphics2D)g);
+    	renderGraph(screenDevice, graphicsContext);
     }
     
-    protected void renderGraph(ScreenDevice screenDevice, Graphics2D g2d) {
+    protected void renderGraph(ScreenDevice screenDevice, GraphicsContext g) {
         if(visualizationServer.getRenderContext().getGraphicsContext() == null) {
-        	visualizationServer.getRenderContext().setGraphicsContext(new GraphicsDecorator(g2d));
+        	visualizationServer.getRenderContext().setGraphicsContext(new GraphicsDecorator(g));
         } else {
-        	visualizationServer.getRenderContext().getGraphicsContext().setDelegate(g2d);
+        	visualizationServer.getRenderContext().getGraphicsContext().setDelegate(g);
         }
         visualizationServer.getRenderContext().setScreenDevice(screenDevice);
         Layout<V,E> layout = visualizationServer.getModel().getGraphLayout();
 
-        g2d.setRenderingHints(renderingHints);
+        
         
         // the size of the VisualizationViewer
         Dimension d = getSize();
         
         // clear the offscreen image
-        g2d.setColor(getBackground());
-        g2d.fillRect(0,0,d.width,d.height);
+        g.setColor(getBackground());
+        g.fillRect(0,0,d.width,d.height);
 
-        AffineTransform oldXform = g2d.getTransform();
+        AffineTransform oldXform = g.getTransform();
         AffineTransform newXform = new AffineTransform(oldXform);
         newXform.concatenate(getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW).getTransform());
         
-        g2d.setTransform(newXform);
+        g.setTransform(newXform);
 
         // if there are  preRenderers set, paint them
         for(Iterator iterator=visualizationServer.getPreRenderPaintables().iterator(); iterator.hasNext(); ) {
         	VisualizationServer.Paintable paintable = (VisualizationServer.Paintable)iterator.next();
             if(paintable.useTransform()) {
-                paintable.paint(g2d);
+                paintable.paint(g);
             } else {
-                g2d.setTransform(oldXform);
-                paintable.paint(g2d);
-                g2d.setTransform(newXform);
+                g.setTransform(oldXform);
+                paintable.paint(g);
+                g.setTransform(newXform);
             }
         }
         
@@ -233,14 +237,14 @@ public class SatelliteVisualizationViewer<V, E>
         for(Iterator iterator=visualizationServer.getPostRenderPaintables().iterator(); iterator.hasNext(); ) {
             VisualizationServer.Paintable paintable = (VisualizationServer.Paintable)iterator.next();
             if(paintable.useTransform()) {
-                paintable.paint(g2d);
+                paintable.paint(g);
             } else {
-                g2d.setTransform(oldXform);
-                paintable.paint(g2d);
-                g2d.setTransform(newXform);
+                g.setTransform(oldXform);
+                paintable.paint(g);
+                g.setTransform(newXform);
             }
         }
-        g2d.setTransform(oldXform);
+        g.setTransform(oldXform);
     }
 
 
@@ -261,7 +265,7 @@ public class SatelliteVisualizationViewer<V, E>
             this.vv = vv;
             this.master = master;
         }
-        public void paint(Graphics g) {
+        public void paint(GraphicsContext g) {
             ShapeTransformer masterViewTransformer = 
             	master.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW);
             ShapeTransformer masterLayoutTransformer = master.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT);
@@ -272,14 +276,13 @@ public class SatelliteVisualizationViewer<V, E>
             lens = masterViewTransformer.inverseTransform(lens);
             lens = masterLayoutTransformer.inverseTransform(lens);
             lens = vvLayoutTransformer.transform(lens);
-            Graphics2D g2d = (Graphics2D)g;
             Color old = g.getColor();
             Color lensColor = master.getBackground();
             vv.setBackground(lensColor.darker());
             g.setColor(lensColor);
-            g2d.fill(lens);
+            g.fill(lens);
             g.setColor(Color.gray);
-            g2d.draw(lens);
+            g.draw(lens);
             g.setColor(old);
         }
 

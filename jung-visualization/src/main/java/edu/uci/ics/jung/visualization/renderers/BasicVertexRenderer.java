@@ -17,14 +17,13 @@ import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 
-import javax.swing.Icon;
-
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.util.Context;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.ScreenDevice;
+import edu.uci.ics.jung.visualization.graphics.Image;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformerDecorator;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
@@ -61,11 +60,12 @@ public class BasicVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
             //rc.getViewTransformer().transform(shape).intersects(deviceRectangle);
 
         if (vertexHit) {
-        	if(rc.getVertexIconTransformer() != null) {
-        		Icon icon = rc.getVertexIconTransformer().transform(v);
-        		if(icon != null) {
-        		
-           			g.draw(icon, shape, (int)x, (int)y);
+        	if(rc.getVertexImageTransformer() != null) {
+        		Image image = rc.getVertexImageTransformer().transform(v);
+        		if(image != null) {
+        			int xLoc = (int)x - image.getWidth()/2;
+                    int yLoc = (int)y - image.getHeight()/2;
+           			g.drawImage(image, shape, xLoc, yLoc);
 
         		} else {
         			paintShapeForVertex(rc, v, shape);
@@ -103,15 +103,15 @@ public class BasicVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
         }
         Paint drawPaint = rc.getVertexDrawPaintTransformer().transform(v);
         if(drawPaint != null) {
-        	g.setPaint(drawPaint);
-        	Stroke oldStroke = g.getStroke();
-        	Stroke stroke = rc.getVertexStrokeTransformer().transform(v);
-        	if(stroke != null) {
-        		g.setStroke(stroke);
-        	}
-        	g.draw(shape);
-        	g.setPaint(oldPaint);
-        	g.setStroke(oldStroke);
+            g.setPaint(drawPaint);
         }
+        Stroke oldStroke = g.getStroke();
+        Stroke stroke = rc.getVertexStrokeTransformer().transform(v);
+        if(stroke != null) {
+            g.setStroke(stroke);
+        }
+        g.draw(shape);
+        g.setPaint(oldPaint);
+        g.setStroke(oldStroke);
     }
 }

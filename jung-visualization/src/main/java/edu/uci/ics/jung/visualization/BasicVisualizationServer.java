@@ -11,7 +11,6 @@ package edu.uci.ics.jung.visualization;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics2D;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.geom.AffineTransform;
@@ -25,6 +24,7 @@ import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
 import edu.uci.ics.jung.visualization.picking.MultiPickedState;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.picking.ShapePickSupport;
@@ -262,11 +262,11 @@ public class BasicVisualizationServer<V, E>
 	 */
 	public 
 //	synchronized 
-	void renderGraph(ScreenDevice screenDevice, Graphics2D g2d) {
+	void renderGraph(ScreenDevice screenDevice, GraphicsContext graphics) {
 	    if(renderContext.getGraphicsContext() == null) {
-	        renderContext.setGraphicsContext(new GraphicsDecorator(g2d));
+	        renderContext.setGraphicsContext(new GraphicsDecorator(graphics));
         } else {
-        	renderContext.getGraphicsContext().setDelegate(g2d);
+        	renderContext.getGraphicsContext().setDelegate(graphics);
         }
 	    renderContext.setScreenDevice(screenDevice);
 	    Layout<V,E> layout = model.getGraphLayout();
@@ -275,26 +275,26 @@ public class BasicVisualizationServer<V, E>
 		Dimension d = renderContext.getScreenDevice().getSize();
 		
 		// clear the offscreen image
-		g2d.setColor(renderContext.getScreenDevice().getBackground());
-		g2d.fillRect(0,0,d.width,d.height);
+		graphics.setColor(renderContext.getScreenDevice().getBackground());
+		graphics.fillRect(0,0,d.width,d.height);
 
-		AffineTransform oldXform = g2d.getTransform();
+		AffineTransform oldXform = graphics.getTransform();
         AffineTransform newXform = new AffineTransform(oldXform);
         newXform.concatenate(
         		renderContext.getMultiLayerTransformer().getTransformer(Layer.VIEW).getTransform());
 //        		viewTransformer.getTransform());
 		
-        g2d.setTransform(newXform);
+        graphics.setTransform(newXform);
 
 		// if there are  preRenderers set, paint them
 		for(Paintable paintable : preRenderers) {
 
 		    if(paintable.useTransform()) {
-		        paintable.paint(g2d);
+		        paintable.paint(graphics);
 		    } else {
-		        g2d.setTransform(oldXform);
-		        paintable.paint(g2d);
-                g2d.setTransform(newXform);
+		    	graphics.setTransform(oldXform);
+		        paintable.paint(graphics);
+		        graphics.setTransform(newXform);
 		    }
 		}
 		
@@ -308,14 +308,14 @@ public class BasicVisualizationServer<V, E>
 		for(Paintable paintable : postRenderers) {
 
 		    if(paintable.useTransform()) {
-		        paintable.paint(g2d);
+		        paintable.paint(graphics);
 		    } else {
-		        g2d.setTransform(oldXform);
-		        paintable.paint(g2d);
-                g2d.setTransform(newXform);
+		    	graphics.setTransform(oldXform);
+		        paintable.paint(graphics);
+		        graphics.setTransform(newXform);
 		    }
 		}
-		g2d.setTransform(oldXform);
+		graphics.setTransform(oldXform);
 	}
 
 

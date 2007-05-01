@@ -10,10 +10,7 @@
 package edu.uci.ics.jung.visualization.annotations;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
@@ -22,11 +19,11 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.swing.JComponent;
-
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VisualizationServer.Paintable;
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
+import edu.uci.ics.jung.visualization.graphics.Label;
 import edu.uci.ics.jung.visualization.transform.AffineTransformer;
 import edu.uci.ics.jung.visualization.transform.LensTransformer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
@@ -71,8 +68,7 @@ public class AnnotationPaintable implements Paintable {
 		return Collections.unmodifiableSet(annotations);
 	}
 
-	public void paint(Graphics g) {
-    	Graphics2D g2d = (Graphics2D)g;
+	public void paint(GraphicsContext g) {
         Color oldColor = g.getColor();
         for(Annotation annotation : annotations) {
         	Object ann = annotation.getAnnotation();
@@ -80,24 +76,24 @@ public class AnnotationPaintable implements Paintable {
             	Shape shape = (Shape)ann;
             	Paint paint = annotation.getPaint();
             	Shape s = transformer.transform(shape);
-            	g2d.setPaint(paint);
+            	g.setPaint(paint);
             	if(annotation.isFill()) {
-            		g2d.fill(s);
+            		g.fill(s);
             	} else {
-            		g2d.draw(s);
+            		g.draw(s);
             	}
         	} else if(ann instanceof String) {
             	Point2D p = annotation.getLocation();
             	String label = (String)ann;
-                Component component = prepareRenderer(rc, annotationRenderer, label);
+            	Label component = prepareRenderer(rc, annotationRenderer, label);
                 component.setForeground((Color)annotation.getPaint());
                 if(annotation.isFill()) {
-                	((JComponent)component).setOpaque(true);
+                	component.setOpaque(true);
                 	component.setBackground((Color)annotation.getPaint());
                 	component.setForeground(Color.black);
                 }
                 Dimension d = component.getPreferredSize();
-                AffineTransform old = g2d.getTransform();
+                AffineTransform old = g.getTransform();
                 AffineTransform base = new AffineTransform(old);
                 AffineTransform xform = transformer.getTransform();
 
@@ -107,17 +103,15 @@ public class AnnotationPaintable implements Paintable {
                 	AffineTransform.getRotateInstance(-rotation, p.getX(), p.getY());
                 base.concatenate(xform);
                 base.concatenate(unrotate);
-                g2d.setTransform(base);
-                rc.getRendererPane().paintComponent(g, component, null, 
-                        (int)p.getX(), (int)p.getY(),
-                        d.width, d.height, true);
-                g2d.setTransform(old);
+                g.setTransform(base);
+                g.drawLabel(component, (int)p.getX(), (int)p.getY(), d.width, d.height);
+                g.setTransform(old);
         	}
         }
         g.setColor(oldColor);
     }
     
-	public Component prepareRenderer(RenderContext rc, AnnotationRenderer annotationRenderer, Object value) {
+	public Label prepareRenderer(RenderContext rc, AnnotationRenderer annotationRenderer, Object value) {
 		return annotationRenderer.getAnnotationRendererComponent(rc.getScreenDevice(), value);
 	}
 

@@ -10,14 +10,13 @@
 
 package edu.uci.ics.jung.visualization.transform.shape;
 
-import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 
-import javax.swing.Icon;
-
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
+import edu.uci.ics.jung.visualization.graphics.Image;
 import edu.uci.ics.jung.visualization.transform.BidirectionalTransformer;
 
 
@@ -34,16 +33,16 @@ public class MagnifyIconGraphics extends TransformingFlatnessGraphics {
         this(transformer, null);
     }
     
-    public MagnifyIconGraphics(BidirectionalTransformer transformer, Graphics2D delegate) {
+    public MagnifyIconGraphics(BidirectionalTransformer transformer, GraphicsContext delegate) {
         super(transformer, delegate);
     }
     
-    public void draw(Icon icon, Shape clip, int x, int y) {
+    public void draw(Image image, Shape clip, int x, int y) {
     	
     	if(transformer instanceof MagnifyShapeTransformer) {
     		MagnifyShapeTransformer mst = (MagnifyShapeTransformer)transformer;
-    		int w = icon.getIconWidth();
-    		int h = icon.getIconHeight();
+    		int w = image.getWidth();
+    		int h = image.getHeight();
     		Rectangle2D r = new Rectangle2D.Double(x-w/2,y-h/2,w,h);
     		Shape lens = mst.getEllipse();
     		if(lens.intersects(r)) {
@@ -62,7 +61,8 @@ public class MagnifyIconGraphics extends TransformingFlatnessGraphics {
     				Shape oldClip = delegate.getClip();
     				delegate.clip(clip);
     				delegate.setTransform(xform);
-    				icon.paintIcon(null, delegate, (int)s.getMinX(), (int)s.getMinY());
+    				delegate.drawImage(image, (int)s.getMinX(), (int)s.getMinY());
+//    				icon.paintIcon(null, delegate, (int)s.getMinX(), (int)s.getMinY());
     				delegate.setTransform(old);
     				delegate.setClip(oldClip);
     			} else {
@@ -72,12 +72,14 @@ public class MagnifyIconGraphics extends TransformingFlatnessGraphics {
     				Area viewBounds = new Area(oldClip);
     				viewBounds.subtract(new Area(lens));
     				delegate.setClip(viewBounds);
-    				icon.paintIcon(null, delegate, (int)r.getMinX(),(int)r.getMinY());
+    				delegate.drawImage(image, (int)r.getMinX(), (int)r.getMinY());
+//    				icon.paintIcon(null, delegate, (int)r.getMinX(),(int)r.getMinY());
     				delegate.setClip(oldClip);
     			}
 
     		} else {
-    			icon.paintIcon(null, delegate, (int)r.getMinX(),(int)r.getMinY());
+    			delegate.drawImage(image, (int)r.getMinX(), (int)r.getMinY());
+//    			icon.paintIcon(null, delegate, (int)r.getMinX(),(int)r.getMinY());
     		}
     	}
     }

@@ -11,10 +11,9 @@
 */
 package edu.uci.ics.jung.visualization.decorators;
 
-import javax.swing.Icon;
-
 import org.apache.commons.collections15.Transformer;
 
+import edu.uci.ics.jung.visualization.graphics.Image;
 import edu.uci.ics.jung.visualization.picking.PickedInfo;
 
 /**
@@ -22,10 +21,10 @@ import edu.uci.ics.jung.visualization.picking.PickedInfo;
  * parameters given in the constructor, so that picked and
  * non-picked vertices can be made to look different.
  */
-public class PickableVertexIconTransformer<V> implements Transformer<V,Icon> {
+public class PickableVertexIconTransformer<V> implements Transformer<V,Image> {
 
-    protected Icon icon;
-    protected Icon picked_icon;
+    protected Image icon;
+    protected Image picked_icon;
     protected PickedInfo<V> pi;
     
     /**
@@ -34,7 +33,7 @@ public class PickableVertexIconTransformer<V> implements Transformer<V,Icon> {
      * @param icon    <code>Icon</code> used to represent vertices
      * @param picked_icon  <code>Icon</code> used to represent picked vertices
      */
-    public PickableVertexIconTransformer(PickedInfo<V> pi, Icon icon, Icon picked_icon)
+    public PickableVertexIconTransformer(PickedInfo<V> pi, Image icon, Image picked_icon)
     {
         if (pi == null)
             throw new IllegalArgumentException("PickedInfo instance must be non-null");
@@ -46,7 +45,7 @@ public class PickableVertexIconTransformer<V> implements Transformer<V,Icon> {
     /**
      * Returns the appropriate <code>Icon</code>, depending on picked state.
      */
-	public Icon transform(V v) {
+	public Image transform(V v) {
         if (pi.isPicked(v))
             return picked_icon;
         else

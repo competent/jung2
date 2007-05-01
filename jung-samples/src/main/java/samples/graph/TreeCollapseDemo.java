@@ -62,6 +62,7 @@ import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.EllipseVertexShapeTransformer;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
 import edu.uci.ics.jung.visualization.subLayout.TreeCollapser;
 
 /**
@@ -261,10 +262,9 @@ public class TreeCollapseDemo extends JApplet {
     		return depths;
     	}
 
-		public void paint(Graphics g) {
+		public void paint(GraphicsContext g) {
 			g.setColor(Color.lightGray);
 		
-			Graphics2D g2d = (Graphics2D)g;
 			Point2D center = radialLayout.getCenter();
 
 			Ellipse2D ellipse = new Ellipse2D.Double();
@@ -274,7 +274,7 @@ public class TreeCollapseDemo extends JApplet {
 				Shape shape
 = vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT).
 transform(ellipse);
-				g2d.draw(shape);
+				g.draw(shape);
 			}
 		}
 

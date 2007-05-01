@@ -65,6 +65,7 @@ import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.transform.LensSupport;
 import edu.uci.ics.jung.visualization.transform.shape.HyperbolicShapeTransformer;
@@ -287,9 +288,8 @@ public class RadialTreeLensDemo extends JApplet {
     		return depths;
     	}
 
-		public void paint(Graphics g) {
+		public void paint(GraphicsContext g) {
 			g.setColor(Color.gray);
-			Graphics2D g2d = (Graphics2D)g;
 			Point2D center = radialLayout.getCenter();
 
 			Ellipse2D ellipse = new Ellipse2D.Double();
@@ -299,7 +299,7 @@ public class RadialTreeLensDemo extends JApplet {
 				Shape shape = 
 					vv.getRenderContext().getMultiLayerTransformer().transform(ellipse);
 //					vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT).transform(ellipse);
-				g2d.draw(shape);
+				g.draw(shape);
 			}
 		}
 

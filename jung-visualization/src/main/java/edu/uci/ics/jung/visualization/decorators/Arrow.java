@@ -11,12 +11,13 @@
 package edu.uci.ics.jung.visualization.decorators;
 
 import java.awt.BasicStroke;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
+
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
 
 /**
  * This pluggable utility paints either a "classic" or a "sleek" filled arrow 
@@ -92,7 +93,7 @@ public class Arrow {
 //        g2d.setStroke(previous);
 //    }
     
-	public void drawArrow(Graphics2D g2d, int sourceX, int sourceY, int destX, int destY, int vertexDiam){
+	public void drawArrow(GraphicsContext g2d, int sourceX, int sourceY, int destX, int destY, int vertexDiam){
 	    Stroke oldStroke = g2d.getStroke();
 		g2d.setStroke(this.m_arrowStroke);
 		Point point1 = new Point(sourceX, sourceY);

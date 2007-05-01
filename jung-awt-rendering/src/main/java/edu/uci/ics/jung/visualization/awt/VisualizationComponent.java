@@ -36,6 +36,7 @@ import edu.uci.ics.jung.visualization.MouseListenerTranslator;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VisualizationModel;
 import edu.uci.ics.jung.visualization.VisualizationServer;
+import edu.uci.ics.jung.visualization.awt.graphics.G2DGraphicsContext;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.cursor.Cursor;
 import edu.uci.ics.jung.visualization.event.KeyListener;
@@ -43,6 +44,7 @@ import edu.uci.ics.jung.visualization.event.MouseEvent;
 import edu.uci.ics.jung.visualization.event.MouseListener;
 import edu.uci.ics.jung.visualization.event.MouseMotionListener;
 import edu.uci.ics.jung.visualization.event.MouseWheelListener;
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
 import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
@@ -223,8 +225,11 @@ public class VisualizationComponent<V,E> extends JPanel
 //			renderGraph(offscreenG2d);
 //		    g2d.drawImage(offscreen, null, 0, 0);
 //		} else {
+		GraphicsContext graphicsContext = new G2DGraphicsContext((Graphics2D)g);
+		graphicsContext.setAntialiasing(true);
+		graphicsContext.setTextAntialiasing(true);
 		visualizationServer.getRenderContext().setScreenDevice(screenDevice);
-		visualizationServer.renderGraph(screenDevice, g2d);
+		visualizationServer.renderGraph(screenDevice, graphicsContext);
 //		}
 	}
     

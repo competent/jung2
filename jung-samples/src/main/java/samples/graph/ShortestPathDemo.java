@@ -40,6 +40,7 @@ import edu.uci.ics.jung.visualization.VisualizationServer;
 import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 
 /**
@@ -87,7 +88,7 @@ public class ShortestPathDemo extends JPanel {
             public boolean useTransform() {
                 return true;
             }
-            public void paint(Graphics g) {
+            public void paint(GraphicsContext g) {
                 if(mPred == null) return;
                 
                 // for all edges, paint edges that are in shortest path

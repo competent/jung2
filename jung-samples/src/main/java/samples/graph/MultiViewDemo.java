@@ -54,6 +54,7 @@ import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.event.Event;
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
 import edu.uci.ics.jung.visualization.picking.MultiPickedState;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.picking.ShapePickSupport;
@@ -293,7 +294,7 @@ public class MultiViewDemo extends JApplet {
         int x;
         int y;
         Font font;
-        FontMetrics metrics;
+//        FontMetrics metrics;
         int swidth;
         int sheight;
         String str;
@@ -304,13 +305,14 @@ public class MultiViewDemo extends JApplet {
             this.str = label;
         }
         
-        public void paint(Graphics g) {
+        public void paint(GraphicsContext g) {
             Dimension d = vv.getSize();
             if(font == null) {
                 font = new Font(g.getFont().getName(), Font.BOLD, 30);
-                metrics = g.getFontMetrics(font);
-                swidth = metrics.stringWidth(str);
-                sheight = metrics.getMaxAscent()+metrics.getMaxDescent();
+                g.setFont(font);
+//                metrics = g.getFontMetrics(font);
+                swidth = g.getStringWidth(str);
+                sheight = g.getFontAscent()+g.getFontDescent();
                 x = (3*d.width/2-swidth)/2;
                 y = d.height-sheight;
             }

@@ -13,10 +13,7 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.event.ActionEvent;
@@ -30,7 +27,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JApplet;
 import javax.swing.JButton;
@@ -48,22 +44,25 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.visualization.Checkmark;
 import edu.uci.ics.jung.visualization.DefaultEdgeLabelRenderer;
 import edu.uci.ics.jung.visualization.DefaultVertexLabelRenderer;
-import edu.uci.ics.jung.visualization.FourPassImageShaper;
 import edu.uci.ics.jung.visualization.Layer;
-import edu.uci.ics.jung.visualization.LayeredIcon;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VisualizationServer;
+import edu.uci.ics.jung.visualization.awt.FourPassImageShaper;
 import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
+import edu.uci.ics.jung.visualization.awt.decorators.VertexImageShapeTransformer;
+import edu.uci.ics.jung.visualization.awt.graphics.AWTImageImpl;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
-import edu.uci.ics.jung.visualization.decorators.DefaultVertexIconTransformer;
+import edu.uci.ics.jung.visualization.decorators.DefaultVertexImageTransformer;
 import edu.uci.ics.jung.visualization.decorators.EllipseVertexShapeTransformer;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
-import edu.uci.ics.jung.visualization.decorators.VertexIconShapeTransformer;
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
+import edu.uci.ics.jung.visualization.graphics.Image;
+import edu.uci.ics.jung.visualization.graphics.LayeredImage;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.renderers.BasicVertexRenderer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
@@ -133,12 +132,12 @@ public class VertexImageShaperDemo extends JApplet {
         }
         
         // a Map for the Icons
-        Map<Number,Icon> iconMap = new HashMap<Number,Icon>();
+        Map<Number,Image> iconMap = new HashMap<Number,Image>();
         for(int i=0; i<VERTEX_COUNT; i++) {
             String name = "/images/topic"+iconNames[i]+".gif";
             try {
-                Icon icon = 
-                    new LayeredIcon(new ImageIcon(VertexImageShaperDemo.class.getResource(name)).getImage());
+                Image icon = 
+                    new LayeredImage(new AWTImageImpl(new ImageIcon(VertexImageShaperDemo.class.getResource(name)).getImage()));
                 iconMap.put(i, icon);
             } catch(Exception ex) {
                 System.err.println("You need slashdoticons.jar in your classpath to see the image "+name);
@@ -176,17 +175,17 @@ public class VertexImageShaperDemo extends JApplet {
         
         // For this demo only, I use a special class that lets me turn various
         // features on and off. For a real application, use VertexIconShapeTransformer instead.
-        final DemoVertexIconShapeTransformer<Number> vertexIconShapeTransformer =
-            new DemoVertexIconShapeTransformer<Number>(new EllipseVertexShapeTransformer<Number>());
+        final DemoVertexImageShapeTransformer<Number> vertexIconShapeTransformer =
+            new DemoVertexImageShapeTransformer<Number>(new EllipseVertexShapeTransformer<Number>());
         
-        final DemoVertexIconTransformer<Number> vertexIconTransformer =
-        	new DemoVertexIconTransformer<Number>();
+        final DemoVertexImageTransformer<Number> vertexImageTransformer =
+        	new DemoVertexImageTransformer<Number>();
         
         vertexIconShapeTransformer.setIconMap(iconMap);
-        vertexIconTransformer.setIconMap(iconMap);
+        vertexImageTransformer.setImageMap(iconMap);
         
         vv.getRenderContext().setVertexShapeTransformer(vertexIconShapeTransformer);
-        vv.getRenderContext().setVertexIconTransformer(vertexIconTransformer);
+        vv.getRenderContext().setVertexImageTransformer(vertexImageTransformer);
         
         // un-comment for RStar Tree visual testing
         //vv.addPostRenderPaintable(new BoundingRectanglePaintable(vv.getRenderContext(), vv.getGraphLayout()));
@@ -194,28 +193,27 @@ public class VertexImageShaperDemo extends JApplet {
         // Get the pickedState and add a listener that will decorate the
         // Vertex images with a checkmark icon when they are picked
         PickedState<Number> ps = vv.getServer().getPickedVertexState();
-        ps.addItemListener(new PickWithIconListener<Number>(vertexIconTransformer));
+        ps.addItemListener(new PickWithIconListener<Number>(vertexImageTransformer));
         
         vv.getServer().addPostRenderPaintable(new VisualizationServer.Paintable(){
             int x;
             int y;
             Font font;
-            FontMetrics metrics;
             int swidth;
             int sheight;
             String str = "Thank You, slashdot.org, for the images!";
             
-            public void paint(Graphics g) {
+            public void paint(GraphicsContext g) {
                 Dimension d = vv.getSize();
                 if(font == null) {
                     font = new Font(g.getFont().getName(), Font.BOLD, 20);
-                    metrics = g.getFontMetrics(font);
-                    swidth = metrics.stringWidth(str);
-                    sheight = metrics.getMaxAscent()+metrics.getMaxDescent();
-                    x = (d.width-swidth)/2;
-                    y = (int)(d.height-sheight*1.5);
                 }
                 g.setFont(font);
+                swidth = g.getStringWidth(str);
+                sheight = g.getFontAscent()+g.getFontDescent();
+                x = (d.width-swidth)/2;
+                y = (int)(d.height-sheight*1.5);
+                
                 Color oldColor = g.getColor();
                 g.setColor(Color.lightGray);
                 g.drawString(str, x, y);
@@ -265,7 +263,7 @@ public class VertexImageShaperDemo extends JApplet {
         fill.addItemListener(new ItemListener(){
 
             public void itemStateChanged(ItemEvent e) {
-                vertexIconTransformer.setFillImages(e.getStateChange()==ItemEvent.SELECTED);
+                vertexImageTransformer.setFillImages(e.getStateChange()==ItemEvent.SELECTED);
                 vv.repaint();
             }
         });
@@ -275,7 +273,7 @@ public class VertexImageShaperDemo extends JApplet {
         drawOutlines.addItemListener(new ItemListener(){
 
             public void itemStateChanged(ItemEvent e) {
-                vertexIconTransformer.setOutlineImages(e.getStateChange()==ItemEvent.SELECTED);
+            	vertexImageTransformer.setOutlineImages(e.getStateChange()==ItemEvent.SELECTED);
                 vv.repaint();
             }
         });
@@ -309,21 +307,21 @@ public class VertexImageShaperDemo extends JApplet {
      *
      */
     public static class PickWithIconListener<V> implements ItemListener {
-        DefaultVertexIconTransformer<V> imager;
-        Icon checked;
+        DefaultVertexImageTransformer<V> imager;
+        Image checked;
         
-        public PickWithIconListener(DefaultVertexIconTransformer<V> imager) {
+        public PickWithIconListener(DefaultVertexImageTransformer<V> imager) {
             this.imager = imager;
             checked = new Checkmark();
         }
 
         public void itemStateChanged(ItemEvent e) {
-            Icon icon = imager.transform((V)e.getItem());
-            if(icon != null && icon instanceof LayeredIcon) {
+            edu.uci.ics.jung.visualization.graphics.Image icon = imager.transform((V)e.getItem());
+            if(icon != null && icon instanceof LayeredImage) {
                 if(e.getStateChange() == ItemEvent.SELECTED) {
-                    ((LayeredIcon)icon).add(checked);
+                    ((LayeredImage)icon).add(checked);
                 } else {
-                    ((LayeredIcon)icon).remove(checked);
+                    ((LayeredImage)icon).remove(checked);
                 }
             }
         }
@@ -409,8 +407,8 @@ public class VertexImageShaperDemo extends JApplet {
      * In a real application, use DefaultVertexIconTransformer instead.
      * 
      */
-    public static class DemoVertexIconTransformer<V> extends DefaultVertexIconTransformer<V>
-    	implements Transformer<V,Icon> {
+    public static class DemoVertexImageTransformer<V> extends DefaultVertexImageTransformer<V>
+    	implements Transformer<V,Image> {
         
         boolean fillImages = true;
         boolean outlineImages = false;
@@ -435,9 +433,9 @@ public class VertexImageShaperDemo extends JApplet {
             this.outlineImages = outlineImages;
         }
         
-        public Icon transform(V v) {
+        public Image transform(V v) {
             if(fillImages) {
-                return (Icon)iconMap.get(v);
+                return imageMap.get(v);
             } else {
                 return null;
             }
@@ -450,11 +448,11 @@ public class VertexImageShaperDemo extends JApplet {
      * In a real application, use VertexIconShapeTransformer instead.
      * 
      */
-    public static class DemoVertexIconShapeTransformer<V> extends VertexIconShapeTransformer<V> {
+    public static class DemoVertexImageShapeTransformer<V> extends VertexImageShapeTransformer<V> {
         
         boolean shapeImages = true;
 
-        public DemoVertexIconShapeTransformer(Transformer<V,Shape> delegate) {
+        public DemoVertexImageShapeTransformer(Transformer<V,Shape> delegate) {
             super(delegate);
         }
 
@@ -473,14 +471,14 @@ public class VertexImageShaperDemo extends JApplet {
         }
 
         public Shape transform(V v) {
-			Icon icon = (Icon) iconMap.get(v);
-
-			if (icon != null && icon instanceof ImageIcon) {
-
-				Image image = ((ImageIcon) icon).getImage();
-
-				Shape shape = (Shape) shapeMap.get(image);
+        	Image icon = iconMap.get(v);
+        	while (icon instanceof LayeredImage) {
+        		icon = ((LayeredImage)icon).getBaseImage();
+        	}
+			if (icon != null && icon instanceof AWTImageImpl) {
+				Shape shape = (Shape) shapeMap.get(icon);
 				if (shape == null) {
+					java.awt.Image image = ((AWTImageImpl) icon).getAWTImage();
 					if (shapeImages) {
 						shape = FourPassImageShaper.getShape(image, 30);
 					} else {
@@ -494,7 +492,7 @@ public class VertexImageShaperDemo extends JApplet {
                         AffineTransform transform = 
                             AffineTransform.getTranslateInstance(-width / 2, -height / 2);
                         shape = transform.createTransformedShape(shape);
-                        shapeMap.put(image, shape);
+                        shapeMap.put(icon, shape);
                     }
 				}
 				return shape;
@@ -523,12 +521,12 @@ public class VertexImageShaperDemo extends JApplet {
 
             GraphicsDecorator g = rc.getGraphicsContext();
             boolean outlineImages = false;
-            Transformer<V,Icon> vertexIconFunction = rc.getVertexIconTransformer();
+            Transformer<V,edu.uci.ics.jung.visualization.graphics.Image> vertexImageFunction = rc.getVertexImageTransformer();
             
-            if(vertexIconFunction instanceof DemoVertexIconTransformer) {
-                outlineImages = ((DemoVertexIconTransformer)vertexIconFunction).isOutlineImages();
+            if(vertexImageFunction instanceof DemoVertexImageTransformer) {
+                outlineImages = ((DemoVertexImageTransformer)vertexImageFunction).isOutlineImages();
             }
-            Icon icon = vertexIconFunction.transform(v);
+            edu.uci.ics.jung.visualization.graphics.Image icon = vertexImageFunction.transform(v);
             if(icon == null || outlineImages) {
                 
                 Shape s = AffineTransform.getTranslateInstance(x,y).
@@ -536,9 +534,9 @@ public class VertexImageShaperDemo extends JApplet {
                 paintShapeForVertex(rc, v, s);
             }
             if(icon != null) {
-                int xLoc = (int) (x - icon.getIconWidth()/2);
-                int yLoc = (int) (y - icon.getIconHeight()/2);
-                icon.paintIcon(null, g.getDelegate(), xLoc, yLoc);
+            	int xLoc = (int)x - icon.getWidth()/2;
+                int yLoc = (int)y - icon.getHeight()/2;
+                rc.getGraphicsContext().drawImage(icon, xLoc, yLoc);
             }
         }
     }

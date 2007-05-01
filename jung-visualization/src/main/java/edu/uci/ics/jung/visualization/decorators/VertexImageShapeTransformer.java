@@ -10,18 +10,18 @@
 
 package edu.uci.ics.jung.visualization.decorators;
 
-import java.awt.Image;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 
 import org.apache.commons.collections15.Transformer;
 
-import edu.uci.ics.jung.visualization.FourPassImageShaper;
+import edu.uci.ics.jung.visualization.graphics.Image;
+import edu.uci.ics.jung.visualization.graphics.LayeredImage;
+import edu.uci.ics.jung.visualization.graphics.ShapeProducer;
+
 
 /**
  * A default implementation that stores images in a Map keyed on the
@@ -31,16 +31,16 @@ import edu.uci.ics.jung.visualization.FourPassImageShaper;
  * @author Tom Nelson 
  *
  *
- */public class VertexIconShapeTransformer<V> implements Transformer<V,Shape> {
+ */public class VertexImageShapeTransformer<V> implements Transformer<V,Shape> {
      
      protected Map<Image, Shape> shapeMap = new HashMap<Image, Shape>();
-     protected Map<V,Icon> iconMap;
+     protected Map<V,Image> imageMap;
      protected Transformer<V,Shape> delegate;
      /**
       * 
       *
       */
-    public VertexIconShapeTransformer(Transformer<V,Shape> delegate) {
+    public VertexImageShapeTransformer(Transformer<V,Shape> delegate) {
         this.delegate = delegate;
     }
 
@@ -63,42 +63,64 @@ import edu.uci.ics.jung.visualization.FourPassImageShaper;
      * the shape from the delegate VertexShapeFunction
      */
     public Shape transform(V v) {
-		Icon icon = iconMap.get(v);
-		if (icon != null && icon instanceof ImageIcon) {
-			Image image = ((ImageIcon) icon).getImage();
-			Shape shape = (Shape) shapeMap.get(image);
-			if (shape == null) {
-			    shape = FourPassImageShaper.getShape(image, 30);
-			    if(shape.getBounds().getWidth() > 0 && 
-			            shape.getBounds().getHeight() > 0) {
-                    // don't cache a zero-sized shape, wait for the image
-			       // to be ready
-                    int width = image.getWidth(null);
-                    int height = image.getHeight(null);
-                    AffineTransform transform = AffineTransform
-						.getTranslateInstance(-width / 2, -height / 2);
-                    shape = transform.createTransformedShape(shape);
-                    shapeMap.put(image, shape);
-                }
-			}
+		Image image = imageMap.get(v);
+		if (image != null) {
+			Shape shape = getShape(image);
+			if (shape == null) return delegate.transform(v);
 			return shape;
 		} else {
 			return delegate.transform(v);
 		}
 	}
+    
+    private Shape getShape(Image image) {
+    	Shape shape = (Shape) shapeMap.get(image);
+		if (shape == null) {
+			shape = _getShape(image);
+		}
+
+		if (shape != null) {
+			shapeMap.put(image, shape);
+		} 
+		
+		return shape;
+    }
+    
+    private Shape _getShape(Image image) {
+    	Shape shape = null;
+		if (image instanceof ShapeProducer)
+			shape = ((ShapeProducer)image).getShape();
+		
+		if (shape != null) {
+		    if (shape.getBounds().getWidth() > 0 && 
+		            shape.getBounds().getHeight() > 0) {
+                // don't cache a zero-sized shape, wait for the image
+		       // to be ready
+                int width = image.getWidth();
+                int height = image.getHeight();
+                AffineTransform transform = AffineTransform
+					.getTranslateInstance(-width / 2, -height / 2);
+                shape = transform.createTransformedShape(shape);
+            }
+		} else if (image instanceof LayeredImage) {
+			shape = _getShape(((LayeredImage)image).getBaseImage());
+		}
+		
+		return shape;
+    }
 
     /**
 	 * @return the iconMap
 	 */
-	public Map<V, Icon> getIconMap() {
-		return iconMap;
+	public Map<V, Image> getImageMap() {
+		return imageMap;
 	}
 
 	/**
 	 * @param iconMap the iconMap to set
 	 */
-	public void setIconMap(Map<V, Icon> iconMap) {
-		this.iconMap = iconMap;
+	public void setImageMap(Map<V, Image> imageMap) {
+		this.imageMap = imageMap;
 	}
 
 	/**

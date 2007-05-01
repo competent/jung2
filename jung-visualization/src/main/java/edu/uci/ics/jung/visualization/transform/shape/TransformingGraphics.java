@@ -10,15 +10,13 @@
 
 package edu.uci.ics.jung.visualization.transform.shape;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.ImageObserver;
 
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
+import edu.uci.ics.jung.visualization.graphics.Image;
 import edu.uci.ics.jung.visualization.transform.BidirectionalTransformer;
 
 
@@ -43,7 +41,7 @@ public class TransformingGraphics extends GraphicsDecorator {
         this(transformer, null);
     }
     
-    public TransformingGraphics(BidirectionalTransformer transformer, Graphics2D delegate) {
+    public TransformingGraphics(BidirectionalTransformer transformer, GraphicsContext delegate) {
         super(delegate);
         this.transformer = transformer;
     }
@@ -99,10 +97,10 @@ public class TransformingGraphics extends GraphicsDecorator {
         delegate.fill(shape);
     }
     
-    public boolean drawImage(Image img, int x, int y, ImageObserver observer) {
+    public void drawImage(Image img, int x, int y) {
     	Image image = null;
         if(transformer instanceof ShapeFlatnessTransformer) {
-        	Rectangle2D r = new Rectangle2D.Double(x,y,img.getWidth(observer),img.getHeight(observer));
+        	Rectangle2D r = new Rectangle2D.Double(x,y,img.getWidth(),img.getHeight());
         	Rectangle2D s = ((ShapeTransformer)transformer).transform(r).getBounds2D();
         	image = img.getScaledInstance((int)s.getWidth(), (int)s.getHeight(), Image.SCALE_SMOOTH);
         	x = (int) s.getMinX();
@@ -110,15 +108,15 @@ public class TransformingGraphics extends GraphicsDecorator {
         } else {
             image = img;
         }
-         return delegate.drawImage(image, x, y, observer);
+         delegate.drawImage(image, x, y);
     }
 
-    public boolean drawImage(Image img, AffineTransform at, ImageObserver observer) {
+    public void drawImage(Image img, AffineTransform at) {
     	Image image = null;
     	int x = (int)at.getTranslateX();
     	int y = (int)at.getTranslateY();
         if(transformer instanceof ShapeFlatnessTransformer) {
-        	Rectangle2D r = new Rectangle2D.Double(x,y,img.getWidth(observer),img.getHeight(observer));
+        	Rectangle2D r = new Rectangle2D.Double(x,y,img.getWidth(),img.getHeight());
         	Rectangle2D s = ((ShapeTransformer)transformer).transform(r).getBounds2D();
         	image = img.getScaledInstance((int)s.getWidth(), (int)s.getHeight(), Image.SCALE_SMOOTH);
         	x = (int) s.getMinX();
@@ -127,7 +125,7 @@ public class TransformingGraphics extends GraphicsDecorator {
         } else {
             image = img;
         }
-         return delegate.drawImage(image, at, observer);
+        super.drawImage(image, at);
     }
 
     /**
@@ -138,13 +136,4 @@ public class TransformingGraphics extends GraphicsDecorator {
         Shape shape = ((ShapeTransformer)transformer).transform(s);
         return delegate.hit(rect, shape, onStroke);
     }
-    
-    public Graphics create() {
-        return delegate.create();
-    }
-    
-    public void dispose() {
-        delegate.dispose();
-    }
-    
 }

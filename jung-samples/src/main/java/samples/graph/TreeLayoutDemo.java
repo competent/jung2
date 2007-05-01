@@ -57,6 +57,7 @@ import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
 import edu.uci.ics.jung.visualization.layout.LayoutTransition;
 import edu.uci.ics.jung.visualization.util.Animator;
 
@@ -215,10 +216,9 @@ public class TreeLayoutDemo extends JApplet {
     		return depths;
     	}
 
-		public void paint(Graphics g) {
+		public void paint(GraphicsContext g) {
 			g.setColor(Color.lightGray);
 		
-			Graphics2D g2d = (Graphics2D)g;
 			Point2D center = radialLayout.getCenter();
 
 			Ellipse2D ellipse = new Ellipse2D.Double();
@@ -226,7 +226,7 @@ public class TreeLayoutDemo extends JApplet {
 				ellipse.setFrameFromDiagonal(center.getX()-d, center.getY()-d, 
 						center.getX()+d, center.getY()+d);
 				Shape shape = vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT).transform(ellipse);
-				g2d.draw(shape);
+				g.draw(shape);
 			}
 		}
 

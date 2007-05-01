@@ -12,8 +12,6 @@
 package edu.uci.ics.jung.visualization.control;
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -29,6 +27,7 @@ import edu.uci.ics.jung.visualization.event.Event;
 import edu.uci.ics.jung.visualization.event.MouseEvent;
 import edu.uci.ics.jung.visualization.event.MouseListener;
 import edu.uci.ics.jung.visualization.event.MouseMotionListener;
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 
 /** 
@@ -131,10 +130,10 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
      */
     class LensPaintable implements Paintable {
 
-        public void paint(Graphics g) {
+        public void paint(GraphicsContext g) {
             Color oldColor = g.getColor();
             g.setColor(lensColor);
-            ((Graphics2D)g).draw(rect);
+            g.draw(rect);
             g.setColor(oldColor);
         }
 
@@ -274,7 +273,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     public void mouseDragged(MouseEvent e) {
         if(locked == false) {
             VisualizationViewer<V,E> vv = (VisualizationViewer)e.getSource();
-            if(vertex != null && down != null) {
+            if(vertex != null) {
                 Point p = e.getPoint();
                 Point2D graphPoint = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(p);
                 Point2D graphDown = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(down);
@@ -293,7 +292,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
             } else {
                 Point2D out = e.getPoint();
                 if(e.getModifiers() == this.addToSelectionModifiers ||
-                        e.getModifiers() == modifiers && down != null) {
+                        e.getModifiers() == modifiers) {
                     rect.setFrameFromDiagonal(down,out);
                 }
             }

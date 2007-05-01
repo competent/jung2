@@ -33,6 +33,9 @@ import javax.swing.Icon;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.RenderContext;
+import edu.uci.ics.jung.visualization.awt.graphics.AWTImageImpl;
+import edu.uci.ics.jung.visualization.awt.graphics.G2DGraphicsContext;
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
 import edu.uci.ics.jung.visualization.renderers.BasicVertexRenderer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 import edu.uci.ics.jung.visualization.transform.shape.ShapeTransformer;
@@ -59,7 +62,7 @@ public class TransformingImageVertexIconRenderer<V,E> extends BasicVertexRendere
     public void paintIconForVertex(RenderContext<V,E> rc, V v, Layout<V,E> layout) {
 
         GraphicsDecorator g = rc.getGraphicsContext();
-        TransformingGraphics g2d = (TransformingGraphics)g;
+        TransformingGraphics transformingGraphics = (TransformingGraphics)g;
         boolean vertexHit = true;
         // get the shape to be rendered
         Shape shape = rc.getVertexShapeTransformer().transform(v);
@@ -77,14 +80,15 @@ public class TransformingImageVertexIconRenderer<V,E> extends BasicVertexRendere
         
         vertexHit = vertexHit(rc, shape);
         if (vertexHit) {
-        	if(rc.getVertexIconTransformer() != null) {
-        		Icon icon = rc.getVertexIconTransformer().transform(v);
+        	if(rc.getVertexImageTransformer() != null) {
+        		edu.uci.ics.jung.visualization.graphics.Image icon = rc.getVertexImageTransformer().transform(v);
         		if(icon != null) {
         		
-                    BufferedImage image = new BufferedImage(icon.getIconWidth(), 
-                            icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+                    BufferedImage image = new BufferedImage(icon.getWidth(), 
+                            icon.getHeight(), BufferedImage.TYPE_INT_ARGB);
                     Graphics2D ig = image.createGraphics();
-                    icon.paintIcon(null, ig, 0, 0);
+                    GraphicsContext gc = new G2DGraphicsContext(ig);
+                    icon.draw(gc, 0, 0);
                     int imageWidth = image.getWidth(null);
                     int imageHeight = image.getHeight(null);
                     
@@ -94,7 +98,7 @@ public class TransformingImageVertexIconRenderer<V,E> extends BasicVertexRendere
                             imageWidth, imageHeight);
                     
                     Shape perspectiveShape = 
-                        ((ShapeTransformer) g2d.getTransformer()).transform(imageRectangle);
+                        ((ShapeTransformer) transformingGraphics.getTransformer()).transform(imageRectangle);
                     
                     // see if the transformer will affect the imageRectangle,
                     if(imageRectangle.equals(perspectiveShape.getBounds2D()) == false) {
@@ -104,15 +108,17 @@ public class TransformingImageVertexIconRenderer<V,E> extends BasicVertexRendere
                         
                         if (ri != null) {
                             
-                            Shape clip = g2d.getClip();
-                            g2d.setClip(perspectiveShape);
+                            Shape clip = transformingGraphics.getClip();
+                            transformingGraphics.setClip(perspectiveShape);
+                            Graphics2D g2d = ((G2DGraphicsContext)transformingGraphics.getDelegate()).getDelegate();
                             g2d.drawRenderedImage(ri, AffineTransform
                                     .getTranslateInstance(xLoc, yLoc));
-                            g2d.setClip(clip);
+                            transformingGraphics.setClip(clip);
                         }
                     } else {
-                        g2d.drawImage(image, AffineTransform.getTranslateInstance(xLoc,
-                                yLoc), null);
+                    	AWTImageImpl i = new AWTImageImpl(image);
+                    	transformingGraphics.drawImage(i, AffineTransform.getTranslateInstance(xLoc,
+                                yLoc));
                     }
 
         		} else {

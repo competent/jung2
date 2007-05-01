@@ -9,7 +9,6 @@
  */
 package edu.uci.ics.jung.visualization.annotations;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
@@ -21,6 +20,7 @@ import java.util.Set;
 
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.RenderContext;
+import edu.uci.ics.jung.visualization.graphics.Label;
 import edu.uci.ics.jung.visualization.transform.AffineTransformer;
 import edu.uci.ics.jung.visualization.transform.LensTransformer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
@@ -116,7 +116,7 @@ public class AnnotationManager {
 				Point2D ip = rc.getMultiLayerTransformer().inverseTransform(Layer.VIEW, p);
 				Point2D ap = annotation.getLocation();
 				String label = (String)ann;
-				Component component = prepareRenderer(rc, annotationRenderer, label);
+				Label component = prepareRenderer(rc, annotationRenderer, label);
 				
 				AffineTransform base = new AffineTransform(transformer.getTransform());
 				double rotation = transformer.getRotation();
@@ -144,11 +144,9 @@ public class AnnotationManager {
 		return closestAnnotation;
 	}
 	
-	public Component prepareRenderer(RenderContext rc, AnnotationRenderer annotationRenderer, Object value) {
+	public Label prepareRenderer(RenderContext rc, AnnotationRenderer annotationRenderer, Object value) {
 		return annotationRenderer.getAnnotationRendererComponent(rc.getScreenDevice(), value);
 	}
-
-
 	
 	
 

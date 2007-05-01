@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -11,6 +12,7 @@ import java.awt.event.ComponentListener;
 import java.awt.event.InputEvent;
 import java.util.LinkedHashSet;
 
+import edu.uci.ics.jung.visualization.awt.graphics.G2DGraphicsContext;
 import edu.uci.ics.jung.visualization.event.Event;
 import edu.uci.ics.jung.visualization.event.KeyEvent;
 import edu.uci.ics.jung.visualization.event.KeyListener;
@@ -20,6 +22,7 @@ import edu.uci.ics.jung.visualization.event.MouseMotionListener;
 import edu.uci.ics.jung.visualization.event.MouseWheelEvent;
 import edu.uci.ics.jung.visualization.event.MouseWheelListener;
 import edu.uci.ics.jung.visualization.event.ScreenDeviceListener;
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
 
 /**
  * An AWT implementation of the screen device.
@@ -504,5 +507,10 @@ public class ScreenDevice<C extends Component> implements edu.uci.ics.jung.visua
 		}
 	}
 
+	public GraphicsContext getGraphicsContext() {
+		return new G2DGraphicsContext( (Graphics2D)comp.getGraphics() );
+	}
 
+
+	
 }

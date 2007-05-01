@@ -31,6 +31,7 @@ import edu.uci.ics.jung.visualization.event.Event;
 import edu.uci.ics.jung.visualization.event.MouseEvent;
 import edu.uci.ics.jung.visualization.event.MouseListener;
 import edu.uci.ics.jung.visualization.event.MouseMotionListener;
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
 
 /** 
  * AnnotatingGraphMousePlugin can create Shape and Text annotations
@@ -136,7 +137,7 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
      */
     class LensPaintable implements Paintable {
 
-        public void paint(Graphics g) {
+        public void paint(GraphicsContext g) {
             Color oldColor = g.getColor();
             g.setColor(annotationColor);
             ((Graphics2D)g).draw(rectangularShape);

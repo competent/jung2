@@ -10,7 +10,6 @@
 package edu.uci.ics.jung.visualization.renderers;
 
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Shape;
@@ -24,6 +23,7 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VertexLabelRenderer;
+import edu.uci.ics.jung.visualization.graphics.Label;
 import edu.uci.ics.jung.visualization.transform.BidirectionalTransformer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 import edu.uci.ics.jung.visualization.transform.shape.ShapeTransformer;
@@ -56,7 +56,7 @@ public class BasicVertexLabelRenderer<V,E> implements Renderer.VertexLabel<V,E> 
 		this.position = position;
 	}
 
-	public Component prepareRenderer(RenderContext<V,E> rc, VertexLabelRenderer graphLabelRenderer, Object value, 
+	public Label prepareRenderer(RenderContext<V,E> rc, Object value, 
 			boolean isSelected, V vertex) {
 		return rc.getVertexLabelRenderer().<V>getVertexLabelRendererComponent(rc.getScreenDevice(), value, 
 				rc.getVertexFontTransformer().transform(vertex), isSelected, vertex);
@@ -81,7 +81,7 @@ public class BasicVertexLabelRenderer<V,E> implements Renderer.VertexLabel<V,E> 
         float x = (float) pt.getX();
         float y = (float) pt.getY();
 
-        Component component = prepareRenderer(rc, rc.getVertexLabelRenderer(), label,
+        Label component = prepareRenderer(rc, label,
         		rc.getPickedVertexState().isPicked(v), v);
         GraphicsDecorator g = rc.getGraphicsContext();
         Dimension d = component.getPreferredSize();
@@ -108,7 +108,7 @@ public class BasicVertexLabelRenderer<V,E> implements Renderer.VertexLabel<V,E> 
     	} else {
     		p = getAnchorPoint(bounds, d, position);
     	}
-        g.draw(component, rc.getRendererPane(), p.x, p.y, d.width, d.height, true);
+        g.drawLabel(component, p.x, p.y, d.width, d.height);
 //        rc.getRendererPane().paintComponent(g.getDelegate(), component, rc.getScreenDevice(), p.x, p.y,
 //                d.width, d.height, true);
         

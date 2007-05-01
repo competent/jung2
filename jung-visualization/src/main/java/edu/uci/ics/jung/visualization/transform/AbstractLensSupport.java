@@ -11,13 +11,12 @@
 package edu.uci.ics.jung.visualization.transform;
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.VisualizationServer.Paintable;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
 /**
  * A class to make it easy to add an
  * examining lens to a jung graph application. See HyperbolicTransformerDemo,
@@ -90,11 +89,10 @@ public abstract class AbstractLensSupport<V,E> implements LensSupport {
          * @return Returns the hyperbolicTransformer.
          */
 
-        public void paint(Graphics g) {
+        public void paint(GraphicsContext g) {
             
-            Graphics2D g2d = (Graphics2D)g;
             g.setColor(Color.decode("0xdddddd"));
-            g2d.fill(ellipse);
+            g.fill(ellipse);
         }
 
         public boolean useTransform() {
@@ -121,11 +119,10 @@ public abstract class AbstractLensSupport<V,E> implements LensSupport {
          * @return Returns the hyperbolicTransformer.
          */
 
-        public void paint(Graphics g) {
+        public void paint(GraphicsContext g) {
             
-            Graphics2D g2d = (Graphics2D)g;
             g.setColor(Color.gray);
-            g2d.draw(ellipse);
+            g.draw(ellipse);
             int centerX = (int)Math.round(ellipse.getCenterX());
             int centerY = (int)Math.round(ellipse.getCenterY());
 //            g.setColor(Color.darkGray);

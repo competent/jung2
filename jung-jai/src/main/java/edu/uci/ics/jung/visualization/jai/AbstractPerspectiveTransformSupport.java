@@ -12,13 +12,12 @@ package edu.uci.ics.jung.visualization.jai;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.VisualizationServer.Paintable;
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
 
 
 /**
@@ -87,14 +86,13 @@ public abstract class AbstractPerspectiveTransformSupport<V,E> implements Perspe
          * @return Returns the hyperbolicTransformer.
          */
 
-        public void paint(Graphics g) {
+        public void paint(GraphicsContext g) {
             
-            Graphics2D g2d = (Graphics2D)g;
             g.setColor(Color.decode("0xdddddd"));
             Shape shape = perspectiveTransformer.perspectiveTransform(rectangle);
-            g2d.fill(shape);
+            g.fill(shape);
             g.setColor(Color.gray);
-            g2d.draw(shape);
+            g.draw(shape);
         }
 
         public boolean useTransform() {

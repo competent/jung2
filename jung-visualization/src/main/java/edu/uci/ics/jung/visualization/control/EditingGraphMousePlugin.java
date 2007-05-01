@@ -1,8 +1,6 @@
 package edu.uci.ics.jung.visualization.control;
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.CubicCurve2D;
@@ -24,6 +22,7 @@ import edu.uci.ics.jung.visualization.event.Event;
 import edu.uci.ics.jung.visualization.event.MouseEvent;
 import edu.uci.ics.jung.visualization.event.MouseListener;
 import edu.uci.ics.jung.visualization.event.MouseMotionListener;
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
 
 /**
  * A plugin that can create vertices, undirected edges, and directed edges
@@ -231,11 +230,11 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
      */
     class EdgePaintable implements VisualizationServer.Paintable {
         
-        public void paint(Graphics g) {
+        public void paint(GraphicsContext g) {
             if(edgeShape != null) {
                 Color oldColor = g.getColor();
                 g.setColor(Color.black);
-                ((Graphics2D)g).draw(edgeShape);
+                g.draw(edgeShape);
                 g.setColor(oldColor);
             }
         }
@@ -250,11 +249,11 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
      */
     class ArrowPaintable implements VisualizationServer.Paintable {
         
-        public void paint(Graphics g) {
+        public void paint(GraphicsContext g) {
             if(arrowShape != null) {
                 Color oldColor = g.getColor();
                 g.setColor(Color.black);
-                ((Graphics2D)g).fill(arrowShape);
+                g.fill(arrowShape);
                 g.setColor(oldColor);
             }
         }

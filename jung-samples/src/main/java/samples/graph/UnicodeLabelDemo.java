@@ -35,15 +35,17 @@ import edu.uci.ics.jung.visualization.DefaultEdgeLabelRenderer;
 import edu.uci.ics.jung.visualization.DefaultVertexLabelRenderer;
 import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
+import edu.uci.ics.jung.visualization.awt.graphics.AWTImageImpl;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
-import edu.uci.ics.jung.visualization.decorators.DefaultVertexIconTransformer;
+import edu.uci.ics.jung.visualization.decorators.DefaultVertexImageTransformer;
 import edu.uci.ics.jung.visualization.decorators.EllipseVertexShapeTransformer;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
-import edu.uci.ics.jung.visualization.decorators.VertexIconShapeTransformer;
+import edu.uci.ics.jung.visualization.decorators.VertexImageShapeTransformer;
+import edu.uci.ics.jung.visualization.graphics.Image;
 
 /**
  * A demo that shows flag images as vertices, and uses unicode
@@ -77,13 +79,13 @@ public class UnicodeLabelDemo {
         vv.getRenderContext().setVertexLabelTransformer(new UnicodeVertexStringer<Integer>(v));
         vv.getRenderContext().setVertexLabelRenderer(new DefaultVertexLabelRenderer(Color.cyan));
         vv.getRenderContext().setEdgeLabelRenderer(new DefaultEdgeLabelRenderer(Color.cyan));
-        VertexIconShapeTransformer<Integer> vertexIconShapeFunction =
-            new VertexIconShapeTransformer<Integer>(new EllipseVertexShapeTransformer<Integer>());
-        DefaultVertexIconTransformer<Integer> vertexIconFunction = new DefaultVertexIconTransformer<Integer>();
-        vv.getRenderContext().setVertexShapeTransformer(vertexIconShapeFunction);
-        vv.getRenderContext().setVertexIconTransformer(vertexIconFunction);
-        loadImages(v, vertexIconFunction.getIconMap());
-        vertexIconShapeFunction.setIconMap(vertexIconFunction.getIconMap());
+        VertexImageShapeTransformer<Integer> vertexImageShapeFunction =
+            new VertexImageShapeTransformer<Integer>(new EllipseVertexShapeTransformer<Integer>());
+        DefaultVertexImageTransformer<Integer> vertexImageFunction = new DefaultVertexImageTransformer<Integer>();
+        vv.getRenderContext().setVertexShapeTransformer(vertexImageShapeFunction);
+        vv.getRenderContext().setVertexImageTransformer(vertexImageFunction);
+        loadImages(v, vertexImageFunction.getImageMap());
+        vertexImageShapeFunction.setImageMap(vertexImageFunction.getImageMap());
         vv.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<Integer>(vv.getServer().getPickedVertexState(), Color.white,  Color.yellow));
         vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Integer,Number>(vv.getServer().getPickedEdgeState(), Color.black, Color.lightGray));
 
@@ -218,18 +220,18 @@ public class UnicodeLabelDemo {
      * A nested class to demo ToolTips
      */
     
-    protected void loadImages(Integer[] vertices, Map<Integer,Icon> imageMap) {
+    protected void loadImages(Integer[] vertices, Map<Integer,Image> imageMap) {
         
-        ImageIcon[] icons = null;
+        Image[] icons = null;
         try {
-            icons = new ImageIcon[] {
-                    new ImageIcon(getClass().getResource("/images/united-states.gif")),
-                    new ImageIcon(getClass().getResource("/images/china.gif")),
-                    new ImageIcon(getClass().getResource("/images/russia.gif")),
-                    new ImageIcon(getClass().getResource("/images/france.gif")),
-                    new ImageIcon(getClass().getResource("/images/germany.gif")),
-                    new ImageIcon(getClass().getResource("/images/japan.gif")),
-                    new ImageIcon(getClass().getResource("/images/spain.gif"))
+            icons = new Image[] {
+                    new AWTImageImpl(new ImageIcon(getClass().getResource("/images/united-states.gif")).getImage()),
+                    new AWTImageImpl(new ImageIcon(getClass().getResource("/images/china.gif")).getImage()),
+                    new AWTImageImpl(new ImageIcon(getClass().getResource("/images/russia.gif")).getImage()),
+                    new AWTImageImpl(new ImageIcon(getClass().getResource("/images/france.gif")).getImage()),
+                    new AWTImageImpl(new ImageIcon(getClass().getResource("/images/germany.gif")).getImage()),
+                    new AWTImageImpl(new ImageIcon(getClass().getResource("/images/japan.gif")).getImage()),
+                    new AWTImageImpl(new ImageIcon(getClass().getResource("/images/spain.gif")).getImage())
             };
         } catch(Exception ex) {
             System.err.println("You need flags.jar in your classpath to see the flag icons.");

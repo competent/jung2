@@ -45,19 +45,23 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.visualization.Checkmark;
 import edu.uci.ics.jung.visualization.DefaultEdgeLabelRenderer;
 import edu.uci.ics.jung.visualization.DefaultVertexLabelRenderer;
-import edu.uci.ics.jung.visualization.LayeredIcon;
 import edu.uci.ics.jung.visualization.VisualizationServer;
 import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
+import edu.uci.ics.jung.visualization.awt.graphics.AWTImageImpl;
+import edu.uci.ics.jung.visualization.awt.graphics.IconImageImpl;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
-import edu.uci.ics.jung.visualization.decorators.DefaultVertexIconTransformer;
+import edu.uci.ics.jung.visualization.decorators.DefaultVertexImageTransformer;
 import edu.uci.ics.jung.visualization.decorators.EllipseVertexShapeTransformer;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
-import edu.uci.ics.jung.visualization.decorators.VertexIconShapeTransformer;
+import edu.uci.ics.jung.visualization.decorators.VertexImageShapeTransformer;
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
+import edu.uci.ics.jung.visualization.graphics.Image;
+import edu.uci.ics.jung.visualization.graphics.LayeredImage;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.transform.LayoutLensSupport;
 import edu.uci.ics.jung.visualization.transform.LensSupport;
@@ -140,12 +144,12 @@ public class LensVertexImageShaperDemo extends JApplet {
         }
         
         // a Map for the Icons
-        Map<Number,Icon> iconMap = new HashMap<Number,Icon>();
+        Map<Number,Image> iconMap = new HashMap<Number,Image>();
         for(int i=0; i<vertices.length; i++) {
             String name = "/images/topic"+iconNames[i]+".gif";
             try {
-                Icon icon = 
-                    new LayeredIcon(new ImageIcon(LensVertexImageShaperDemo.class.getResource(name)).getImage());
+                Image icon = 
+                    new LayeredImage(new AWTImageImpl(new ImageIcon(LensVertexImageShaperDemo.class.getResource(name)).getImage()));
                 iconMap.put(vertices[i], icon);
             } catch(Exception ex) {
                 System.err.println("You need slashdoticons.jar in your classpath to see the image "+name);
@@ -173,17 +177,17 @@ public class LensVertexImageShaperDemo extends JApplet {
         
         
         // features on and off. For a real application, use VertexIconAndShapeFunction instead.
-        final VertexIconShapeTransformer<Number> vertexImageShapeFunction =
-            new VertexIconShapeTransformer<Number>(new EllipseVertexShapeTransformer<Number>());
+        final VertexImageShapeTransformer<Number> vertexImageShapeFunction =
+            new VertexImageShapeTransformer<Number>(new EllipseVertexShapeTransformer<Number>());
 
-        final DefaultVertexIconTransformer<Number> vertexIconFunction =
-        	new DefaultVertexIconTransformer<Number>();
+        final DefaultVertexImageTransformer<Number> vertexIconFunction =
+        	new DefaultVertexImageTransformer<Number>();
         
-        vertexImageShapeFunction.setIconMap(iconMap);
-        vertexIconFunction.setIconMap(iconMap);
+        vertexImageShapeFunction.setImageMap(iconMap);
+        vertexIconFunction.setImageMap(iconMap);
         
         vv.getRenderContext().setVertexShapeTransformer(vertexImageShapeFunction);
-        vv.getRenderContext().setVertexIconTransformer(vertexIconFunction);
+        vv.getRenderContext().setVertexImageTransformer(vertexIconFunction);
 
         
         // Get the pickedState and add a listener that will decorate the
@@ -195,18 +199,17 @@ public class LensVertexImageShaperDemo extends JApplet {
             int x;
             int y;
             Font font;
-            FontMetrics metrics;
             int swidth;
             int sheight;
             String str = "Thank You, slashdot.org, for the images!";
             
-            public void paint(Graphics g) {
+            public void paint(GraphicsContext g) {
                 Dimension d = vv.getSize();
                 if(font == null) {
                     font = new Font(g.getFont().getName(), Font.BOLD, 20);
-                    metrics = g.getFontMetrics(font);
-                    swidth = metrics.stringWidth(str);
-                    sheight = metrics.getMaxAscent()+metrics.getMaxDescent();
+                    g.setFont(font);
+                    swidth = g.getStringWidth(str);
+                    sheight = g.getFontAscent()+g.getFontDescent();
                     x = (d.width-swidth)/2;
                     y = (int)(d.height-sheight*1.5);
                 }
@@ -400,21 +403,21 @@ public class LensVertexImageShaperDemo extends JApplet {
     }
     
     public static class PickWithIconListener implements ItemListener {
-        DefaultVertexIconTransformer<Number> imager;
-        Icon checked;
+        DefaultVertexImageTransformer<Number> imager;
+        Image checked;
         
-        public PickWithIconListener(DefaultVertexIconTransformer<Number> imager) {
+        public PickWithIconListener(DefaultVertexImageTransformer<Number> imager) {
             this.imager = imager;
             checked = new Checkmark(Color.red);
         }
 
         public void itemStateChanged(ItemEvent e) {
-            Icon icon = imager.transform((Number)e.getItem());
-            if(icon != null && icon instanceof LayeredIcon) {
+            Image icon = imager.transform((Number)e.getItem());
+            if(icon != null && icon instanceof LayeredImage) {
                 if(e.getStateChange() == ItemEvent.SELECTED) {
-                    ((LayeredIcon)icon).add(checked);
+                    ((LayeredImage)icon).add(checked);
                 } else {
-                    ((LayeredIcon)icon).remove(checked);
+                    ((LayeredImage)icon).remove(checked);
                 }
             }
         }

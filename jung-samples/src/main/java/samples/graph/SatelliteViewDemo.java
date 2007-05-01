@@ -51,6 +51,7 @@ import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
 import edu.uci.ics.jung.visualization.renderers.GradientVertexRenderer;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 import edu.uci.ics.jung.visualization.transform.shape.ShapeTransformer;
@@ -231,7 +232,7 @@ public class SatelliteViewDemo<V, E> extends JApplet {
             this.vv = vv;
             this.master = master;
         }
-        public void paint(Graphics g) {
+        public void paint(GraphicsContext g) {
             ShapeTransformer masterViewTransformer = master.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW);
             ShapeTransformer masterLayoutTransformer = master.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT);
             ShapeTransformer vvLayoutTransformer = vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT);
@@ -256,10 +257,9 @@ public class SatelliteViewDemo<V, E> extends JApplet {
             lens = masterViewTransformer.inverseTransform(lens);
             lens = masterLayoutTransformer.inverseTransform(lens);
             lens = vvLayoutTransformer.transform(lens);
-            Graphics2D g2d = (Graphics2D)g;
             Color old = g.getColor();
             g.setColor(Color.cyan);
-            g2d.draw(lens);
+            g.draw(lens);
             
             path = new GeneralPath();
             path.moveTo((float)rect.getMinX(), (float)rect.getCenterY());
@@ -271,8 +271,8 @@ public class SatelliteViewDemo<V, E> extends JApplet {
             crosshairShape = masterLayoutTransformer.inverseTransform(crosshairShape);
             crosshairShape = vvLayoutTransformer.transform(crosshairShape);
             g.setColor(Color.black);
-            g2d.setStroke(new BasicStroke(3));
-            g2d.draw(crosshairShape);
+            g.setStroke(new BasicStroke(3));
+            g.draw(crosshairShape);
             
             g.setColor(old);
         }

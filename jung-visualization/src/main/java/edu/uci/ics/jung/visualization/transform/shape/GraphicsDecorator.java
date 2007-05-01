@@ -10,12 +10,13 @@
 
 package edu.uci.ics.jung.visualization.transform.shape;
 
-import java.awt.Component;
-import java.awt.Graphics2D;
 import java.awt.Shape;
+import java.awt.geom.AffineTransform;
 
-import javax.swing.CellRendererPane;
-import javax.swing.Icon;
+import edu.uci.ics.jung.visualization.graphics.GraphicsWrapper;
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
+import edu.uci.ics.jung.visualization.graphics.Image;
+import edu.uci.ics.jung.visualization.graphics.ImageDrawDelegate;
 
 
 /**
@@ -28,29 +29,35 @@ import javax.swing.Icon;
  *
  *
  */
-public class GraphicsDecorator extends Graphics2DWrapper {
+public class GraphicsDecorator extends GraphicsWrapper {
     
     public GraphicsDecorator() {
         this(null);
     }
-    public GraphicsDecorator(Graphics2D delegate) {
+    public GraphicsDecorator(GraphicsContext delegate) {
         super(delegate);
     }
     
-    public void draw(Icon icon, Component c, Shape clip, int x, int y) {
-    	int w = icon.getIconWidth();
-    	int h = icon.getIconHeight();
-    	icon.paintIcon(c, delegate, x-w/2, y-h/2);
-    }
     
-    public void draw(Icon icon, Shape clip, int x, int y) {
-    	int w = icon.getIconWidth();
-    	int h = icon.getIconHeight();
-    	icon.paintIcon(null, delegate, x-w/2, y-h/2);
-    }
     
-    public void draw(Component c, CellRendererPane rendererPane, 
-    		int x, int y, int w, int h, boolean shouldValidate) {
-    	rendererPane.paintComponent(delegate, c, c.getParent(), x, y, w, h, shouldValidate);
-    }
+	public void drawImage(Image img, AffineTransform xform) {
+    	xform = new AffineTransform(xform);
+    	xform.translate(-img.getWidth()/2, -img.getHeight()/2);
+    	AffineTransform oldXform = getTransform();
+    	setTransform(xform);
+		drawImage(img, 0, 0);
+		setTransform(oldXform);
+	}
+	@Override
+	public void drawImage(Image img, int x, int y) {
+		if (img instanceof ImageDrawDelegate)
+			img.draw(delegate, x, y);
+		else super.drawImage(img, x, y);
+	}
+	
+	public void drawImage(Image img, Shape clip, int x, int y) {
+		if (img instanceof ImageDrawDelegate)
+			img.draw(delegate, x, y);
+		else super.drawImage(img, x, y);
+	}
 }

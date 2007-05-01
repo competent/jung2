@@ -76,9 +76,9 @@ public interface Renderer<V,E> {
 	}
 	
 	interface EdgeLabel<V,E> {
-		void labelEdge(RenderContext<V,E> rc, Layout<V,E> layout, E e, String label);
+		void labelEdge(RenderContext<V,E> rc, Layout<V,E> layout, E e);
 		class NOOP implements EdgeLabel {
-			public void labelEdge(RenderContext rc, Layout layout, Object e, String label) {}
+			public void labelEdge(RenderContext rc, Layout layout, Object e) {}
 		}
 	}
 }

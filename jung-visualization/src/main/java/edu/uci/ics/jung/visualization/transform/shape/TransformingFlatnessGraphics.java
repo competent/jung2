@@ -10,9 +10,9 @@
 
 package edu.uci.ics.jung.visualization.transform.shape;
 
-import java.awt.Graphics2D;
 import java.awt.Shape;
 
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
 import edu.uci.ics.jung.visualization.transform.BidirectionalTransformer;
 import edu.uci.ics.jung.visualization.transform.HyperbolicTransformer;
 
@@ -35,7 +35,7 @@ public class TransformingFlatnessGraphics extends TransformingGraphics {
         this(transformer, null);
     }
     
-    public TransformingFlatnessGraphics(BidirectionalTransformer transformer, Graphics2D delegate) {
+    public TransformingFlatnessGraphics(BidirectionalTransformer transformer, GraphicsContext delegate) {
         super(transformer, delegate);
     }
     

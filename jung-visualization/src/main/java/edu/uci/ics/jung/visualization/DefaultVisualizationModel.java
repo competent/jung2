@@ -13,7 +13,7 @@ import java.awt.Dimension;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.EventListenerList;
+//import javax.swing.event.EventListenerList;
 
 import edu.uci.ics.jung.algorithms.IterativeContext;
 import edu.uci.ics.jung.algorithms.layout.Layout;

@@ -15,9 +15,6 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.Ellipse2D;
 
-import javax.swing.CellRendererPane;
-import javax.swing.Icon;
-
 import org.apache.commons.collections15.Predicate;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.ConstantTransformer;
@@ -32,6 +29,7 @@ import edu.uci.ics.jung.graph.util.IncidentEdgeIndexFunction;
 import edu.uci.ics.jung.visualization.decorators.ConstantDirectionalEdgeValueTransformer;
 import edu.uci.ics.jung.visualization.decorators.DirectionalEdgeArrowTransformer;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
+import edu.uci.ics.jung.visualization.graphics.Image;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 
@@ -51,7 +49,7 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
         		new Ellipse2D.Float(-10,-10,20,20));
 
     protected Transformer<V,String> vertexLabelTransformer = new ConstantTransformer(null);
-    protected Transformer<V,Icon> vertexIconTransformer;
+    protected Transformer<V,Image> vertexIconTransformer;
     protected Transformer<V,Font> vertexFontTransformer = 
         new ConstantTransformer(new Font("Helvetica", Font.PLAIN, 12));
     
@@ -59,6 +57,7 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
     protected Transformer<V,Paint> vertexFillPaintTransformer = new ConstantTransformer(Color.RED);
     
     protected Transformer<E,String> edgeLabelTransformer = new ConstantTransformer(null);
+    protected Transformer<E,Image> edgeLabelImageTransformer = new ConstantTransformer(null);
     protected Transformer<E,Stroke> edgeStrokeTransformer = new ConstantTransformer(new BasicStroke(1.0f));
     
     protected Transformer<Context<Graph<V,E>,E>,Shape> edgeArrowTransformer = 
@@ -106,13 +105,13 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
     protected PickedState<V> pickedVertexState;
     protected PickedState<E> pickedEdgeState;
     
-    /**
-     * The CellRendererPane is used here just as it is in JTree
-     * and JTable, to allow a pluggable JLabel-based renderer for
-     * Vertex and Edge label strings and icons.
-     */
-    protected CellRendererPane rendererPane = new CellRendererPane();
-    
+//    /**
+//     * The CellRendererPane is used here just as it is in JTree
+//     * and JTable, to allow a pluggable JLabel-based renderer for
+//     * Vertex and Edge label strings and icons.
+//     */
+//    protected CellRendererPane rendererPane = new CellRendererPane();
+//    
     /**
      * A default GraphLabelRenderer - picked Vertex labels are
      * blue, picked edge labels are cyan
@@ -310,6 +309,20 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.RenderContext#getEdgeLabelTransformer()
      */
+    public Transformer<E,Image> getEdgeLabelImageTransformer() {
+        return edgeLabelImageTransformer;
+    }
+
+    /* (non-Javadoc)
+     * @see edu.uci.ics.jung.visualization.RenderContext#setEdgeLabelTransformer(edu.uci.ics.jung.visualization.decorators.EdgeLabelTransformer)
+     */
+    public void setEdgeLabelImageTransformer(Transformer<E,Image> edgeLabelImageTransformer) {
+        this.edgeLabelImageTransformer = edgeLabelImageTransformer;
+    }
+    
+    /* (non-Javadoc)
+     * @see edu.uci.ics.jung.visualization.RenderContext#getEdgeLabelTransformer()
+     */
     public Transformer<E,String> getEdgeLabelTransformer() {
         return edgeLabelTransformer;
     }
@@ -397,19 +410,19 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
         this.pickedVertexState = pickedVertexState;
     }
 
-    /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.RenderContext#getRendererPane()
-     */
-    public CellRendererPane getRendererPane() {
-        return rendererPane;
-    }
-
-    /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.RenderContext#setRendererPane(javax.swing.CellRendererPane)
-     */
-    public void setRendererPane(CellRendererPane rendererPane) {
-        this.rendererPane = rendererPane;
-    }
+//    /* (non-Javadoc)
+//     * @see edu.uci.ics.jung.visualization.RenderContext#getRendererPane()
+//     */
+//    public CellRendererPane getRendererPane() {
+//        return rendererPane;
+//    }
+//
+//    /* (non-Javadoc)
+//     * @see edu.uci.ics.jung.visualization.RenderContext#setRendererPane(javax.swing.CellRendererPane)
+//     */
+//    public void setRendererPane(CellRendererPane rendererPane) {
+//        this.rendererPane = rendererPane;
+//    }
 
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.RenderContext#getScreenDevice()
@@ -443,14 +456,14 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.RenderContext#getVertexIconTransformer()
      */
-    public Transformer<V,Icon> getVertexIconTransformer() {
+    public Transformer<V,Image> getVertexImageTransformer() {
         return vertexIconTransformer;
     }
 
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.RenderContext#setVertexIconTransformer(edu.uci.ics.jung.visualization.decorators.VertexIconTransformer)
      */
-    public void setVertexIconTransformer(Transformer<V,Icon> vertexIconTransformer) {
+    public void setVertexImageTransformer(Transformer<V,Image> vertexIconTransformer) {
         this.vertexIconTransformer = vertexIconTransformer;
     }
 

@@ -9,7 +9,6 @@
  */
 package edu.uci.ics.jung.visualization.renderers;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.Shape;
@@ -25,6 +24,7 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VertexLabelRenderer;
+import edu.uci.ics.jung.visualization.graphics.Label;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 
 /**
@@ -43,7 +43,7 @@ public class VertexLabelAsShapeRenderer<V,E>
 
 	protected Map<V,Shape> shapes = new HashMap<V,Shape>();
 	
-	public Component prepareRenderer(RenderContext<V,E> rc, VertexLabelRenderer graphLabelRenderer, Object value, 
+	public Label prepareRenderer(RenderContext<V,E> rc, Object value, 
 			boolean isSelected, V vertex) {
 		return rc.getVertexLabelRenderer().<V>getVertexLabelRendererComponent(rc.getScreenDevice(), value, 
 				rc.getVertexFontTransformer().transform(vertex), isSelected, vertex);
@@ -63,7 +63,7 @@ public class VertexLabelAsShapeRenderer<V,E>
         	return;
         }
         GraphicsDecorator g = rc.getGraphicsContext();
-        Component component = prepareRenderer(rc, rc.getVertexLabelRenderer(), label,
+        Label component = prepareRenderer(rc, label,
         		rc.getPickedVertexState().isPicked(v), v);
         Dimension d = component.getPreferredSize();
         
@@ -76,7 +76,7 @@ public class VertexLabelAsShapeRenderer<V,E>
         int x = (int)p.getX();
         int y = (int)p.getY();
 
-        g.draw(component, rc.getRendererPane(), x+h_offset, y+v_offset, d.width, d.height, true);
+        g.drawLabel(component, x+h_offset, y+v_offset, d.width, d.height);
 //        rc.getRendererPane().paintComponent(g.getDelegate(), component, rc.getScreenDevice(), x+h_offset, y+v_offset,
 //                d.width, d.height, true);
 

@@ -11,11 +11,9 @@ package edu.uci.ics.jung.visualization.swt;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,9 +27,12 @@ import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.graphics.Device;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Transform;
 import org.eclipse.swt.widgets.Composite;
 
 import edu.uci.ics.jung.algorithms.layout.Layout;
@@ -50,7 +51,9 @@ import edu.uci.ics.jung.visualization.event.MouseEvent;
 import edu.uci.ics.jung.visualization.event.MouseListener;
 import edu.uci.ics.jung.visualization.event.MouseMotionListener;
 import edu.uci.ics.jung.visualization.event.MouseWheelListener;
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
+import edu.uci.ics.jung.visualization.swt.graphics.GCGraphicsContext;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
 import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
 
@@ -70,16 +73,19 @@ public class VisualizationComposite<V,E>
 		return dest;
 	}
 	
-	BufferedImage offscreen;
-	Graphics2D offscreenG2d;
-	private void checkOffscreenImage(Dimension d) {
-		if (offscreen == null 
-				|| offscreen.getWidth() != d.width
-				|| offscreen.getHeight() != d.height) {
-			offscreen = new BufferedImage(d.width, d.height, BufferedImage.TYPE_INT_ARGB);
-			offscreenG2d = offscreen.createGraphics();
-		}
-	}
+//	Image offscreen;
+//	GC offscreenGC;
+//	private void checkOffscreenImage(Device dev, Point p) {
+//		if (offscreen == null 
+//				|| offscreen.getBounds().width != p.x
+//				|| offscreen.getBounds().height != p.y) {
+//			if (offscreenGC != null) offscreenGC.dispose();
+//			if (offscreen != null) offscreen.dispose();
+//			
+//			offscreen = new Image(dev, p.x, p.y);
+//			offscreenGC = new GC(offscreen);
+//		}
+//	}
 	
 	
 	protected ChangeEventSupport changeSupport =
@@ -167,7 +173,7 @@ public class VisualizationComposite<V,E>
 	@SuppressWarnings("unchecked")
     public VisualizationComposite(Composite parent, int style, VisualizationModel<V,E> model,
 	        Dimension preferredSize) {
-		dest = new Composite(parent, style | SWT.NO_BACKGROUND);
+		dest = new Composite(parent, style | SWT.DOUBLE_BUFFERED | SWT.NO_BACKGROUND);
 		
 		VisualizationViewer.eventSourceToViewer.put(dest, this);
 		
@@ -180,40 +186,35 @@ public class VisualizationComposite<V,E>
         renderingHints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         
         dest.addPaintListener(new PaintListener() {
-			public void paintControl(PaintEvent e) {
-//				long total = System.currentTimeMillis();
-//				long time = System.currentTimeMillis();
-				checkOffscreenImage(getSize());
-//				time = System.currentTimeMillis() - time;
-//				System.err.println("time1: " + time);
-				
-//				time = System.currentTimeMillis();
-				offscreenG2d.setRenderingHints(renderingHints);
-				visualizationServer.getRenderContext().setScreenDevice(screenDevice);
-//				time = System.currentTimeMillis() - time;
-//				System.err.println("time2: " + time);
-				
-//				time = System.currentTimeMillis();
-				visualizationServer.renderGraph(screenDevice, offscreenG2d);
-//				time = System.currentTimeMillis() - time;
-//				System.err.println("time3: " + time);
-				
-//				time = System.currentTimeMillis();
-				ImageData imageData = ImageUtils.convertToSWT(offscreen);
-//				time = System.currentTimeMillis() - time;
-//				System.err.println("time4: " + time);
-				
-//				time = System.currentTimeMillis();
-				Image image = new Image(e.display, imageData);
-//				time = System.currentTimeMillis() - time;
-//				System.err.println("time5: " + time);
-				
-//				time = System.currentTimeMillis();
-				e.gc.drawImage(image, 0, 0);
-				image.dispose();
-//				time = System.currentTimeMillis() - time;
-//				System.err.println("time6: " + time);
-//				System.err.println("total (" + System.currentTimeMillis() + "):" + (System.currentTimeMillis()-total));
+			public void paintControl(PaintEvent e) {				
+				Transform transform = new Transform(e.gc.getDevice());
+				e.gc.getTransform(transform);
+				Font font = e.gc.getFont();
+				org.eclipse.swt.graphics.Color fg = e.gc.getForeground();
+				org.eclipse.swt.graphics.Color bg = e.gc.getBackground();
+				int a = e.gc.getAntialias();
+				int ta = e.gc.getTextAntialias();
+				int alpha = e.gc.getAlpha();
+				try {
+					e.gc.setAntialias(SWT.ON);
+					e.gc.setTextAntialias(SWT.ON);
+					
+					GCGraphicsContext graphicsContext = new GCGraphicsContext(e.gc);
+					screenDevice.setGraphicsContext(graphicsContext);
+					visualizationServer.getRenderContext().setScreenDevice(screenDevice);
+					visualizationServer.renderGraph(screenDevice, graphicsContext);
+					graphicsContext.dispose();
+				} finally {
+					e.gc.setAlpha(alpha);
+					e.gc.setTextAntialias(ta);
+					e.gc.setAntialias(a);
+					e.gc.setBackground(bg);
+					e.gc.setForeground(fg);
+					e.gc.setFont(font);
+					e.gc.setTransform(transform);
+					transform.dispose();
+					transform = null;
+				}
 			}
         });
         

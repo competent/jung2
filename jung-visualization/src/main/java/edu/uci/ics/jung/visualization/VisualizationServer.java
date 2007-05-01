@@ -9,16 +9,15 @@
 */
 package edu.uci.ics.jung.visualization;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.util.List;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.EventListenerList;
+//import javax.swing.event.EventListenerList;
 
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 
@@ -243,7 +242,7 @@ public interface VisualizationServer<V, E> {
 
     void setRenderContext(RenderContext<V, E> renderContext);
     
-    void renderGraph(ScreenDevice screenDevice, Graphics2D g2d);
+    void renderGraph(ScreenDevice screenDevice, GraphicsContext graphics);
     
 //    void repaint();
     
@@ -251,7 +250,7 @@ public interface VisualizationServer<V, E> {
      * an interface for the preRender and postRender
      */
     interface Paintable {
-        public void paint(Graphics g);
+        public void paint(GraphicsContext g);
         public boolean useTransform();
     }
 

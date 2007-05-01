@@ -55,6 +55,7 @@ import edu.uci.ics.jung.visualization.control.ModalLensGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
 import edu.uci.ics.jung.visualization.layout.LayoutTransition;
 import edu.uci.ics.jung.visualization.transform.LensSupport;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
@@ -232,10 +233,8 @@ public class BalloonLayoutDemo extends JApplet {
     		this.layout = layout;
     	}
     	
-		public void paint(Graphics g) {
+		public void paint(GraphicsContext g) {
 			g.setColor(Color.gray);
-		
-			Graphics2D g2d = (Graphics2D)g;
 
 			Ellipse2D ellipse = new Ellipse2D.Double();
 			for(String v : layout.getGraph().getVertices()) {
@@ -255,7 +254,7 @@ public class BalloonLayoutDemo extends JApplet {
 					shape = vv.getRenderContext().getMultiLayerTransformer().transform(Layer.LAYOUT,shape);
 				}
 
-				g2d.draw(shape);
+				g.draw(shape);
 			}
 		}
 

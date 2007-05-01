@@ -50,6 +50,7 @@ import edu.uci.ics.jung.visualization.control.ModalLensGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
 import edu.uci.ics.jung.visualization.swt.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.swt.VisualizationComposite;
 import edu.uci.ics.jung.visualization.transform.LensSupport;
@@ -263,10 +264,8 @@ public class SWTBalloonLayoutDemo extends Composite {
 					this.layout = layout;
 				}
 
-				public void paint(Graphics g) {
+				public void paint(GraphicsContext g) {
 					g.setColor(Color.gray);
-
-					Graphics2D g2d = (Graphics2D)g;
 
 					Ellipse2D ellipse = new Ellipse2D.Double();
 					for(String v : layout.getGraph().getVertices()) {
@@ -286,7 +285,7 @@ public class SWTBalloonLayoutDemo extends Composite {
 							shape = vv.getRenderContext().getMultiLayerTransformer().transform(Layer.LAYOUT,shape);
 						}
 
-						g2d.draw(shape);
+						g.draw(shape);
 					}
 				}
 

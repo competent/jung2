@@ -14,6 +14,7 @@ import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Control;
@@ -28,6 +29,8 @@ import edu.uci.ics.jung.visualization.event.MouseMotionListener;
 import edu.uci.ics.jung.visualization.event.MouseWheelEvent;
 import edu.uci.ics.jung.visualization.event.MouseWheelListener;
 import edu.uci.ics.jung.visualization.event.ScreenDeviceListener;
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
+import edu.uci.ics.jung.visualization.swt.graphics.GCGraphicsContext;
 
 /**
  * An AWT implementation of the screen device.
@@ -616,5 +619,14 @@ public class ScreenDevice<C extends Control> implements edu.uci.ics.jung.visuali
 		synchronized (mouseWheelListeners) {
 			return mouseWheelListeners.toArray(new MouseWheelListener[mouseWheelListeners.size()]);
 		}
+	}
+
+	GraphicsContext graphicsContext;
+	public GraphicsContext getGraphicsContext() {
+		return graphicsContext;
+	}
+	
+	public void setGraphicsContext(GraphicsContext graphicsContext) {
+		this.graphicsContext = graphicsContext;
 	}
 }

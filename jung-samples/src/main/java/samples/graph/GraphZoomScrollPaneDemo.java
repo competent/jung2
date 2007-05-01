@@ -34,12 +34,14 @@ import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationServer;
 import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
+import edu.uci.ics.jung.visualization.awt.graphics.IconImageImpl;
 import edu.uci.ics.jung.visualization.control.AbstractModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.event.MouseEvent;
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
 import edu.uci.ics.jung.visualization.renderers.GradientVertexRenderer;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 import edu.uci.ics.jung.visualization.renderers.BasicVertexLabelRenderer.InsidePositioner;
@@ -81,22 +83,22 @@ public class GraphZoomScrollPaneDemo {
         String[] v = createVertices(10);
         createEdges(v);
         
-        ImageIcon sandstoneIcon = null;
+        IconImageImpl sandstoneIcon = null;
         String imageLocation = "/images/Sandstone.jpg";
         try {
             	sandstoneIcon = 
-            	    new ImageIcon(getClass().getResource(imageLocation));
+            	    new IconImageImpl(new ImageIcon(getClass().getResource(imageLocation)));
         } catch(Exception ex) {
             System.err.println("Can't load \""+imageLocation+"\"");
         }
-        final ImageIcon icon = sandstoneIcon;
+        final IconImageImpl icon = sandstoneIcon;
         vv =  new VisualizationComponent<String,Number>(new KKLayout<String,Number>(graph));
         
         if(icon != null) {
             vv.getServer().addPreRenderPaintable(new VisualizationServer.Paintable(){
-                public void paint(Graphics g) {
+                public void paint(GraphicsContext g) {
                     Dimension d = vv.getSize();
-                    g.drawImage(icon.getImage(),0,0,d.width,d.height,vv);
+                    icon.draw(g, d.width, d.height);
                 }
                 public boolean useTransform() { return false; }
             });
@@ -105,18 +107,18 @@ public class GraphZoomScrollPaneDemo {
             int x;
             int y;
             Font font;
-            FontMetrics metrics;
+//            FontMetrics metrics;
             int swidth;
             int sheight;
             String str = "GraphZoomScrollPane Demo";
             
-            public void paint(Graphics g) {
+            public void paint(GraphicsContext g) {
                 Dimension d = vv.getSize();
                 if(font == null) {
                     font = new Font(g.getFont().getName(), Font.BOLD, 30);
-                    metrics = g.getFontMetrics(font);
-                    swidth = metrics.stringWidth(str);
-                    sheight = metrics.getMaxAscent()+metrics.getMaxDescent();
+                    g.setFont(font);
+                    swidth = g.getStringWidth(str);
+                    sheight = g.getFontHeight();
                     x = (d.width-swidth)/2;
                     y = (int)(d.height-sheight*1.5);
                 }

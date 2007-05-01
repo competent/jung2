@@ -10,8 +10,9 @@
 
 package edu.uci.ics.jung.visualization;
 
-import java.awt.Component;
 import java.awt.Font;
+
+import edu.uci.ics.jung.visualization.graphics.Label;
 
 /**
  * @author Tom Nelson 
@@ -35,6 +36,6 @@ public interface VertexLabelRenderer {
      *				valid value
      * @param	vertex  the vertex for the label being drawn.
      */
-    <T> Component getVertexLabelRendererComponent(ScreenDevice vv, Object value,
+    <T> Label getVertexLabelRendererComponent(ScreenDevice vv, Object value,
 					   Font font, boolean isSelected, T vertex);
 }

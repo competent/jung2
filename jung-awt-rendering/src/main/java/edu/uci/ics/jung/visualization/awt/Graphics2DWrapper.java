@@ -8,7 +8,7 @@
  * Created on Jul 11, 2005
  */
 
-package edu.uci.ics.jung.visualization.transform.shape;
+package edu.uci.ics.jung.visualization.awt;
 
 import java.awt.Color;
 import java.awt.Composite;

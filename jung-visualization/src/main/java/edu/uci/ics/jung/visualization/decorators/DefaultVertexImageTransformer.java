@@ -13,9 +13,9 @@ package edu.uci.ics.jung.visualization.decorators;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.Icon;
-
 import org.apache.commons.collections15.Transformer;
+
+import edu.uci.ics.jung.visualization.graphics.Image;
 
 /**
  * A simple, stateful VertexIconFunction.
@@ -25,31 +25,31 @@ import org.apache.commons.collections15.Transformer;
  *
  *
  */
-public class DefaultVertexIconTransformer<V> implements Transformer<V,Icon> {
+public class DefaultVertexImageTransformer<V> implements Transformer<V,Image> {
      
     /**
      * icon storage
      */
-     protected Map<V,Icon> iconMap = new HashMap<V,Icon>();
+     protected Map<V,Image> imageMap = new HashMap<V,Image>();
 
      /**
       * Returns the icon storage as a <code>Map</code>.
       */
-    public Map<V,Icon> getIconMap() {
-		return iconMap;
+    public Map<V,Image> getImageMap() {
+		return imageMap;
 	}
 
     /**
      * Sets the icon storage to the specified <code>Map</code>.
      */
-	public void setIconMap(Map<V,Icon> iconMap) {
-		this.iconMap = iconMap;
+	public void setImageMap(Map<V,Image> imageMap) {
+		this.imageMap = imageMap;
 	}
 
     /**
      * Returns the <code>Icon</code> associated with <code>v</code>.
      */
-	public Icon transform(V v) {
-		return iconMap.get(v);
+	public Image transform(V v) {
+		return imageMap.get(v);
 	}
 }

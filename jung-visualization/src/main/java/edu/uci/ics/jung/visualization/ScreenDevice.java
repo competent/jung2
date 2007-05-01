@@ -10,9 +10,11 @@ import edu.uci.ics.jung.visualization.event.MouseListener;
 import edu.uci.ics.jung.visualization.event.MouseMotionListener;
 import edu.uci.ics.jung.visualization.event.MouseWheelListener;
 import edu.uci.ics.jung.visualization.event.ScreenDeviceListener;
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
 
 public interface ScreenDevice<C> {
 	C getUIComponent();
+	GraphicsContext getGraphicsContext();
 	
 	Color getBackground();
 	void setBackground(Color c);

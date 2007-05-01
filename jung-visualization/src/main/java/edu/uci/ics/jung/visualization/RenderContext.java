@@ -6,9 +6,6 @@ import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.Stroke;
 
-import javax.swing.CellRendererPane;
-import javax.swing.Icon;
-
 import org.apache.commons.collections15.Predicate;
 import org.apache.commons.collections15.Transformer;
 
@@ -17,6 +14,7 @@ import edu.uci.ics.jung.algorithms.util.Context;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.EdgeIndexFunction;
+import edu.uci.ics.jung.visualization.graphics.Image;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 
@@ -98,8 +96,12 @@ public interface RenderContext<V, E> {
     void setEdgeShapeTransformer(Transformer<Context<Graph<V,E>,E>,Shape> edgeShapeTransformer);
 
     Transformer<E,String> getEdgeLabelTransformer();
+    
+    Transformer<E,Image> getEdgeLabelImageTransformer();
 
     void setEdgeLabelTransformer(Transformer<E,String> edgeStringer);
+    
+    void setEdgeLabelImageTransformer(Transformer<E,Image> edgeImager);
 
     Transformer<E,Stroke> getEdgeStrokeTransformer();
 
@@ -122,9 +124,9 @@ public interface RenderContext<V, E> {
 
     void setPickedVertexState(PickedState<V> pickedVertexState);
 
-    CellRendererPane getRendererPane();
-
-    void setRendererPane(CellRendererPane rendererPane);
+//    CellRendererPane getRendererPane();
+//
+//    void setRendererPane(CellRendererPane rendererPane);
 
     ScreenDevice getScreenDevice();
 
@@ -134,9 +136,9 @@ public interface RenderContext<V, E> {
 
     void setVertexFontTransformer(Transformer<V,Font> vertexFontTransformer);
 
-    Transformer<V,Icon> getVertexIconTransformer();
+    Transformer<V,Image> getVertexImageTransformer();
 
-    void setVertexIconTransformer(Transformer<V,Icon> vertexIconTransformer);
+    void setVertexImageTransformer(Transformer<V,Image> vertexImageTransformer);
 
     Predicate<Context<Graph<V,E>,V>> getVertexIncludePredicate();
 

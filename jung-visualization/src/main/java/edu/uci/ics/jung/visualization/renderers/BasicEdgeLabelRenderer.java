@@ -9,7 +9,6 @@
  */
 package edu.uci.ics.jung.visualization.renderers;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
@@ -23,18 +22,22 @@ import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.visualization.EdgeLabelRenderer;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.RenderContext;
+import edu.uci.ics.jung.visualization.graphics.Image;
+import edu.uci.ics.jung.visualization.graphics.Label;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 
 public class BasicEdgeLabelRenderer<V,E> implements Renderer.EdgeLabel<V,E> {
 	
-	public Component prepareRenderer(RenderContext<V,E> rc, EdgeLabelRenderer graphLabelRenderer, Object value, 
+	public Label prepareRenderer(RenderContext<V,E> rc, Object value, 
 			boolean isSelected, E edge) {
 		return rc.getEdgeLabelRenderer().<E>getEdgeLabelRendererComponent(rc.getScreenDevice(), value, 
 				rc.getEdgeFontTransformer().transform(edge), isSelected, edge);
 	}
     
-    public void labelEdge(RenderContext<V,E> rc, Layout<V,E> layout, E e, String label) {
-    	if(label == null || label.length() == 0) return;
+    public void labelEdge(RenderContext<V,E> rc, Layout<V,E> layout, E e) {
+    	String text = rc.getEdgeLabelTransformer().transform(e);
+    	Image image = rc.getEdgeLabelImageTransformer().transform(e);
+    	if(image == null && (text == null || text.length() == 0)) return;
     	
     	Graph<V,E> graph = layout.getGraph();
         // don't draw edge if either incident vertex is not drawn
@@ -67,8 +70,10 @@ public class BasicEdgeLabelRenderer<V,E> implements Renderer.EdgeLabel<V,E> {
         int xDisplacement = (int) (rc.getLabelOffset() * (distY / totalLength));
         int yDisplacement = (int) (rc.getLabelOffset() * (-distX / totalLength));
         
-        Component component = prepareRenderer(rc, rc.getEdgeLabelRenderer(), label, 
+        Label component = prepareRenderer(rc, text, 
                 rc.getPickedEdgeState().isPicked(e), e);
+        Image labelImage = rc.getEdgeLabelImageTransformer().transform(e);
+        component.setImage(labelImage);
         
         Dimension d = component.getPreferredSize();
 
@@ -103,7 +108,7 @@ public class BasicEdgeLabelRenderer<V,E> implements Renderer.EdgeLabel<V,E> {
         
         xform.translate(-d.width/2, -(d.height/2-parallelOffset));
         g.setTransform(xform);
-        g.draw(component, rc.getRendererPane(), 0, 0, d.width, d.height, true);
+        g.drawLabel(component, 0, 0);
 
 //        rc.getRendererPane().paintComponent(g.getDelegate(), component, rc.getScreenDevice(), 
 //                0, 0,

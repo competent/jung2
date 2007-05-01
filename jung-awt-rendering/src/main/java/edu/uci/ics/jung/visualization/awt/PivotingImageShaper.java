@@ -8,14 +8,13 @@
  * Created on Jun 17, 2005
  */
 
-package edu.uci.ics.jung.visualization;
+package edu.uci.ics.jung.visualization.awt;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Area;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
@@ -23,6 +22,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+
 
 /**
  * Provides factory methods that, given a BufferedImage, an Image,
@@ -34,18 +34,23 @@ import javax.imageio.ImageIO;
  * The methods try to detect lines in order to minimize points
  * in the path
  * 
- * @author Tom Nelson
+ * @author Tom Nelson 
  *
  * 
  */
-public class FourPassImageShaper {
+public class PivotingImageShaper {
     
     /**
-     * given the fileName of an image, possibly with a transparent
-     * background, return the Shape of the opaque part of the image
-     * @param fileName name of the image, loaded from the classpath
-     * @return the Shape
+     * the number of pixels to skip while sampling the
+     * images edges
      */
+    static int sample = 1;
+    /**
+     * the first x coordinate of the shape. Used to discern
+     * when we are done 
+     */
+    static int firstx = 0;
+    
     public static Shape getShape(String fileName) {
         return getShape(fileName, Integer.MAX_VALUE);
     }
@@ -81,14 +86,7 @@ public class FourPassImageShaper {
     /**
      * Given an image, possibly with a transparent background, return
      * the Shape of the opaque part of the image
-     * 
-     * If the image is larger than max in either direction, scale the
-     * image down to max-by-max, do the trace (on fewer points) then
-     * scale the resulting shape back up to the size of the original
-     * image.
-     * 
-     * @param image the image to trace
-     * @param max used to restrict number of points in the resulting shape
+     * @param image
      * @return the Shape
      */
     public static Shape getShape(BufferedImage image, int max) {
@@ -110,27 +108,17 @@ public class FourPassImageShaper {
         }
     }
     
-    public static Shape getShape(BufferedImage image) {
-        Area area = new Area(leftEdge(image));
-        area.intersect(new Area(bottomEdge(image)));
-        area.intersect(new Area(rightEdge(image)));
-        area.intersect(new Area(topEdge(image)));
-        return area;
-    }
     /**
-     * Checks to see if point p is on a line that passes thru
-     * points p1 and p2. If p is on the line, extend the line
-     * segment so that it is from p1 to the location of p.
-     * If the point p is not on the line, update my shape
-     * with a line extending to the old p2 location, make
-     * the old p2 the new p1, and make p2 the old p
-     * @param p1
-     * @param p2
-     * @param p
-     * @param line
-     * @param path
-     * @return
+     * Given an image, possibly with a transparent background, return
+     * the Shape of the opaque part of the image
+     * @param image
+     * @return the Shape
      */
+    public static Shape getShape(BufferedImage image) {
+        firstx = 0;
+        return leftEdge(image, new GeneralPath());
+    }
+    
     private static Point2D detectLine(Point2D p1, Point2D p2, Point2D p, 
             Line2D line, GeneralPath path) {
         if(p2 == null) {
@@ -155,30 +143,37 @@ public class FourPassImageShaper {
      * @param path
      * @return
      */
-    private static Shape leftEdge(BufferedImage image) {
-        GeneralPath path = new GeneralPath();
-        Point2D p1 = new Point2D.Float(image.getWidth()-1, 0);
+    private static Shape leftEdge(BufferedImage image, GeneralPath path) {
+        int lastj = 0;
+        Point2D p1 = null;
         Point2D p2 = null;
         Line2D line = new Line2D.Float();
-        Point2D p = new Point2D.Float();
-        path.moveTo(image.getWidth()-1, 0);
-        
-        for(int i=0; i<image.getHeight(); i++) {
-            p.setLocation(image.getWidth()-1, i);
+        for(int i=0; i<image.getHeight(); i+=sample) {
+            boolean aPointExistsOnThisLine = false;
             // go until we reach an opaque point, then stop
-            for(int j=0; j<image.getWidth(); j++) {
+            for(int j=0; j<image.getWidth(); j+=sample) {
                 if((image.getRGB(j,i) & 0xff000000) != 0) {
                     // this is a point I want
-                    p.setLocation(j,i);
+                    Point2D p = new Point2D.Float(j,i);
+                    aPointExistsOnThisLine = true;
+                    if(path.getCurrentPoint() != null) {
+                        // this is a continuation of a path
+                        p2 = detectLine(p1,p2,p,line,path);
+                    } else {
+                        // this is the first point in the path
+                        path.moveTo(j,i);
+                        firstx = j;
+                        p1 = p;
+                    }
+                    lastj = j;
                     break;
                 }
             }
-            p2 = detectLine(p1, p2, p, line, path);
+            if(aPointExistsOnThisLine == false) {
+                break;
+            }
         }
-        p.setLocation(image.getWidth()-1, image.getHeight()-1);
-        detectLine(p1, p2, p, line, path);
-        path.closePath();
-        return path;
+        return bottomEdge(image, path, lastj);
     }
     
     /**
@@ -188,28 +183,28 @@ public class FourPassImageShaper {
      * @param start
      * @return
      */
-    private static Shape bottomEdge(BufferedImage image) {
-        GeneralPath path = new GeneralPath();
-        Point2D p1 = new Point2D.Float(0, 0);
+    private static Shape bottomEdge(BufferedImage image, GeneralPath path, int start) {
+        int lastj = 0;
+        Point2D p1 = path.getCurrentPoint();
         Point2D p2 = null;
         Line2D line = new Line2D.Float();
-        Point2D p = new Point2D.Float();
-        path.moveTo(0, 0);
-        for(int i=0; i<image.getWidth(); i++) {
-            p.setLocation(i, 0);
-            for(int j=image.getHeight()-1; j>=0; j--) {
+        for(int i=start; i<image.getWidth(); i+=sample) {
+            boolean aPointExistsOnThisLine = false;
+            for(int j=image.getHeight()-1; j>=0; j-=sample) {
                 if((image.getRGB(i,j) & 0xff000000) != 0) {
                     // this is a point I want
-                    p.setLocation(i,j);
+                    Point2D p = new Point2D.Float(i,j);
+                    aPointExistsOnThisLine = true;
+                    p2 = detectLine(p1,p2,p,line,path);
+                    lastj = j;
                     break;
                 }
             }
-            p2 = detectLine(p1, p2, p, line, path);
+            if(aPointExistsOnThisLine == false) {
+                break;
+            }
         }
-        p.setLocation(image.getWidth()-1, 0);
-        detectLine(p1, p2, p, line, path);
-        path.closePath();
-        return path;
+        return rightEdge(image, path, lastj);
     }
     
     /**
@@ -219,29 +214,29 @@ public class FourPassImageShaper {
      * @param start
      * @return
      */
-    private static Shape rightEdge(BufferedImage image) {
-        GeneralPath path = new GeneralPath();
-        Point2D p1 = new Point2D.Float(0, image.getHeight()-1);
+    private static Shape rightEdge(BufferedImage image, GeneralPath path, int start) {
+        int lastj = 0;
+        Point2D p1 = path.getCurrentPoint();
         Point2D p2 = null;
         Line2D line = new Line2D.Float();
-        Point2D p = new Point2D.Float();
-        path.moveTo(0, image.getHeight()-1);
-        
-        for(int i=image.getHeight()-1; i>=0; i--) {
-            p.setLocation(0, i);
-            for(int j=image.getWidth()-1; j>=0; j--) {
+        for(int i=start; i>=0; i-=sample) {
+            boolean aPointExistsOnThisLine = false;
+
+            for(int j=image.getWidth()-1; j>=0; j-=sample) {
                 if((image.getRGB(j,i) & 0xff000000) != 0) {
                     // this is a point I want
-                    p.setLocation(j,i);
+                    Point2D p = new Point2D.Float(j,i);
+                    aPointExistsOnThisLine = true;
+                    p2 = detectLine(p1,p2,p,line,path);
+                    lastj=j;
                     break;
                 }
             }
-            p2 = detectLine(p1, p2, p, line, path);
+            if(aPointExistsOnThisLine == false) {
+                break;
+            }
         }
-        p.setLocation(0, 0);
-        detectLine(p1, p2, p,line, path);
-        path.closePath();
-        return path;
+        return topEdge(image, path, lastj);
     }
     
     /**
@@ -251,27 +246,25 @@ public class FourPassImageShaper {
      * @param start
      * @return
      */
-    private static Shape topEdge(BufferedImage image) {
-        GeneralPath path = new GeneralPath();
-        Point2D p1 = new Point2D.Float(image.getWidth()-1, image.getHeight()-1);
+    private static Shape topEdge(BufferedImage image, GeneralPath path, int start) {
+        Point2D p1 = path.getCurrentPoint();
         Point2D p2 = null;
         Line2D line = new Line2D.Float();
-        Point2D p = new Point2D.Float();
-        path.moveTo(image.getWidth()-1, image.getHeight()-1);
-        
-        for(int i=image.getWidth()-1; i>=0; i--) {
-            p.setLocation(i, image.getHeight()-1);
-            for(int j=0; j<image.getHeight(); j++) {
+        for(int i=start; i>=firstx; i-=sample) {
+            boolean aPointExistsOnThisLine = false;
+            for(int j=0; j<image.getHeight(); j+=sample) {
                 if((image.getRGB(i,j) & 0xff000000) != 0) {
                     // this is a point I want
-                    p.setLocation(i,j);
+                    Point2D p = new Point2D.Float(i,j);
+                    aPointExistsOnThisLine = true;
+                    p2 = detectLine(p1,p2,p,line,path);
                     break;
                 }
             }
-            p2 = detectLine(p1, p2, p, line, path);
+            if(aPointExistsOnThisLine == false) {
+                break;
+            }
         }
-        p.setLocation(0, image.getHeight()-1);
-        detectLine(p1, p2, p, line, path);
         path.closePath();
         return path;
     }

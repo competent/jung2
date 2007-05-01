@@ -1,8 +1,6 @@
 package edu.uci.ics.jung.visualization.layout;
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
 
@@ -14,6 +12,7 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VisualizationServer;
+import edu.uci.ics.jung.visualization.graphics.GraphicsContext;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
 
 public class BoundingRectanglePaintable<V,E> implements VisualizationServer.Paintable {
@@ -40,12 +39,11 @@ public class BoundingRectanglePaintable<V,E> implements VisualizationServer.Pain
 		}
 	}
 	
-	public void paint(Graphics g) {
-		Graphics2D g2d = (Graphics2D)g;
+	public void paint(GraphicsContext g) {
 		g.setColor(Color.cyan);
 		
 		for(Rectangle2D r : rectangles) {
-			g2d.draw(rc.getMultiLayerTransformer().transform(Layer.LAYOUT, r));
+			g.draw(rc.getMultiLayerTransformer().transform(Layer.LAYOUT, r));
 		}
 	}
 

@@ -11,16 +11,11 @@
 package edu.uci.ics.jung.visualization.annotations;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Rectangle;
 import java.io.Serializable;
 
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
-
 import edu.uci.ics.jung.visualization.ScreenDevice;
+import edu.uci.ics.jung.visualization.graphics.Label;
 
 /**
  * AnnotationRenderer is similar to the cell renderers
@@ -31,52 +26,52 @@ import edu.uci.ics.jung.visualization.ScreenDevice;
  * 
  */
 @SuppressWarnings("serial")
-public class AnnotationRenderer extends JLabel implements
+public class AnnotationRenderer implements
         Serializable {
 
-     protected static Border noFocusBorder = new EmptyBorder(0,0,0,0); 
+//     protected static Border noFocusBorder = new EmptyBorder(0,0,0,0); 
     
     /**
      * Creates a default table cell renderer.
      */
     public AnnotationRenderer() {
-        setOpaque(true);
-        setBorder(noFocusBorder);
+//        setOpaque(true);
+//        setBorder(noFocusBorder);
     }
 
-    /**
-     * Overrides <code>JComponent.setForeground</code> to assign
-     * the unselected-foreground color to the specified color.
-     * 
-     * @param c set the foreground color to this value
-     */
-    public void setForeground(Color c) {
-        super.setForeground(c); 
-    }
-    
-    /**
-     * Overrides <code>JComponent.setBackground</code> to assign
-     * the unselected-background color to the specified color.
-     *
-     * @param c set the background color to this value
-     */
-    public void setBackground(Color c) {
-        super.setBackground(c); 
-    }
+//    /**
+//     * Overrides <code>JComponent.setForeground</code> to assign
+//     * the unselected-foreground color to the specified color.
+//     * 
+//     * @param c set the foreground color to this value
+//     */
+//    public void setForeground(Color c) {
+//        super.setForeground(c); 
+//    }
+//    
+//    /**
+//     * Overrides <code>JComponent.setBackground</code> to assign
+//     * the unselected-background color to the specified color.
+//     *
+//     * @param c set the background color to this value
+//     */
+//    public void setBackground(Color c) {
+//        super.setBackground(c); 
+//    }
 
-    /**
-     * Notification from the <code>UIManager</code> that the look and feel
-     * [L&F] has changed.
-     * Replaces the current UI object with the latest version from the 
-     * <code>UIManager</code>.
-     *
-     * @see JComponent#updateUI
-     */
-    public void updateUI() {
-        super.updateUI(); 
-        setForeground(null);
-        setBackground(null);
-    }
+//    /**
+//     * Notification from the <code>UIManager</code> that the look and feel
+//     * [L&F] has changed.
+//     * Replaces the current UI object with the latest version from the 
+//     * <code>UIManager</code>.
+//     *
+//     * @see JComponent#updateUI
+//     */
+//    public void updateUI() {
+//        super.updateUI(); 
+//        setForeground(null);
+//        setBackground(null);
+//    }
     
     /**
     *
@@ -88,20 +83,20 @@ public class AnnotationRenderer extends JLabel implements
     * @param edge  the <code>Edge</code>
     * @return the default label renderer
     */
-    public Component getAnnotationRendererComponent(ScreenDevice sd, Object value) {
-        
-        super.setForeground(sd.getForeground());
-        super.setBackground(sd.getBackground());
+    public Label getAnnotationRendererComponent(ScreenDevice sd, Object value) {
+        Label label = sd.getGraphicsContext().createLabel();
+        label.setForeground(sd.getForeground());
+        label.setBackground(sd.getBackground());
         
 //        if(font != null) {
 //            setFont(font);
 //        } else {
-            setFont(sd.getFont());
+        label.setFont(sd.getFont());
 //        }
-        setIcon(null);
-        setBorder(noFocusBorder);
-        setValue(value); 
-        return this;
+        label.setImage(null);
+        //setBorder(noFocusBorder);
+        label.setText(getValue(value)); 
+        return label;
     }
     
     /*
@@ -112,69 +107,69 @@ public class AnnotationRenderer extends JLabel implements
      * drawbacks of overriding methods like these.
      */
 
-    /**
-     * Overridden for performance reasons.
-     * See the <a href="#override">Implementation Note</a> 
-     * for more information.
-     */
-    public boolean isOpaque() { 
-        Color back = getBackground();
-        Component p = getParent(); 
-        if (p != null) { 
-            p = p.getParent(); 
-        }
-        boolean colorMatch = (back != null) && (p != null) && 
-        back.equals(p.getBackground()) && 
-        p.isOpaque();
-        return !colorMatch && super.isOpaque(); 
-    }
-
-    /**
-     * Overridden for performance reasons.
-     * See the <a href="#override">Implementation Note</a> 
-     * for more information.
-     */
-    public void validate() {}
-
-    /**
-     * Overridden for performance reasons.
-     * See the <a href="#override">Implementation Note</a> 
-     * for more information.
-     */
-    public void revalidate() {}
-
-    /**
-     * Overridden for performance reasons.
-     * See the <a href="#override">Implementation Note</a> 
-     * for more information.
-     */
-    public void repaint(long tm, int x, int y, int width, int height) {}
-
-    /**
-     * Overridden for performance reasons.
-     * See the <a href="#override">Implementation Note</a> 
-     * for more information.
-     */
-    public void repaint(Rectangle r) { }
-
-    /**
-     * Overridden for performance reasons.
-     * See the <a href="#override">Implementation Note</a> 
-     * for more information.
-     */
-    protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {	
-        // Strings get interned...
-        if (propertyName=="text") {
-            super.firePropertyChange(propertyName, oldValue, newValue);
-        }
-    }
-
-    /**
-     * Overridden for performance reasons.
-     * See the <a href="#override">Implementation Note</a> 
-     * for more information.
-     */
-    public void firePropertyChange(String propertyName, boolean oldValue, boolean newValue) { }
+//    /**
+//     * Overridden for performance reasons.
+//     * See the <a href="#override">Implementation Note</a> 
+//     * for more information.
+//     */
+//    public boolean isOpaque() { 
+//        Color back = getBackground();
+//        Component p = getParent(); 
+//        if (p != null) { 
+//            p = p.getParent(); 
+//        }
+//        boolean colorMatch = (back != null) && (p != null) && 
+//        back.equals(p.getBackground()) && 
+//        p.isOpaque();
+//        return !colorMatch && super.isOpaque(); 
+//    }
+//
+//    /**
+//     * Overridden for performance reasons.
+//     * See the <a href="#override">Implementation Note</a> 
+//     * for more information.
+//     */
+//    public void validate() {}
+//
+//    /**
+//     * Overridden for performance reasons.
+//     * See the <a href="#override">Implementation Note</a> 
+//     * for more information.
+//     */
+//    public void revalidate() {}
+//
+//    /**
+//     * Overridden for performance reasons.
+//     * See the <a href="#override">Implementation Note</a> 
+//     * for more information.
+//     */
+//    public void repaint(long tm, int x, int y, int width, int height) {}
+//
+//    /**
+//     * Overridden for performance reasons.
+//     * See the <a href="#override">Implementation Note</a> 
+//     * for more information.
+//     */
+//    public void repaint(Rectangle r) { }
+//
+//    /**
+//     * Overridden for performance reasons.
+//     * See the <a href="#override">Implementation Note</a> 
+//     * for more information.
+//     */
+//    protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {	
+//        // Strings get interned...
+//        if (propertyName=="text") {
+//            super.firePropertyChange(propertyName, oldValue, newValue);
+//        }
+//    }
+//
+//    /**
+//     * Overridden for performance reasons.
+//     * See the <a href="#override">Implementation Note</a> 
+//     * for more information.
+//     */
+//    public void firePropertyChange(String propertyName, boolean oldValue, boolean newValue) { }
 
     /**
      * Sets the <code>String</code> object for the cell being rendered to
@@ -185,7 +180,7 @@ public class AnnotationRenderer extends JLabel implements
      * @see JLabel#setText
      * 
      */
-    protected void setValue(Object value) {
-        setText((value == null) ? "" : value.toString());
+    protected String getValue(Object value) {
+        return (value == null) ? "" : value.toString();
     }
 }
