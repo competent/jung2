@@ -16,16 +16,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Point2D;
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
 
-import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationModel;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.transform.MutableAffineTransformer;
-import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 import edu.uci.ics.jung.visualization.transform.shape.ShapeTransformer;
 
 /**
@@ -120,123 +115,6 @@ public class SatelliteVisualizationViewer<V, E>
         return master;
     }
     
-    /*
-    protected void renderGraph(Graphics2D g2d) {
-        if(renderContext.getGraphicsContext() == null) {
-            renderContext.setGraphicsContext(new GraphicsDecorator(g2d));
-        } else {
-        renderContext.getGraphicsContext().setDelegate(g2d);
-        }
-        renderContext.setScreenDevice(this);
-        Layout<V,E> layout = model.getGraphLayout();
-
-        g2d.setRenderingHints(renderingHints);
-        
-        // the size of the VisualizationViewer
-        Dimension d = getSize();
-        
-        // clear the offscreen image
-        g2d.setColor(getBackground());
-        g2d.fillRect(0,0,d.width,d.height);
-
-        AffineTransform oldXform = g2d.getTransform();
-        AffineTransform newXform = new AffineTransform(oldXform);
-        newXform.concatenate(getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW).getTransform());
-        
-        g2d.setTransform(newXform);
-
-        // if there are  preRenderers set, paint them
-        for(Iterator iterator=preRenderers.iterator(); iterator.hasNext(); ) {
-            Paintable paintable = (Paintable)iterator.next();
-            if(paintable.useTransform()) {
-                paintable.paint(g2d);
-            } else {
-                g2d.setTransform(oldXform);
-                paintable.paint(g2d);
-                g2d.setTransform(newXform);
-            }
-        }
-        
-        renderer.render(renderContext, layout);
-
-        
-//        locationMap.clear();
-//        
-//        // paint all the edges
-//        try {
-//            for(E e : layout.getGraph().getEdges()) {
-//
-//            V v1 = layout.getGraph().getEndpoints(e).getFirst();
-//            V v2 = layout.getGraph().getEndpoints(e).getSecond();
-//            
-//            Point2D p = (Point2D) locationMap.get(v1);
-//            if(p == null) {
-//                
-//                p = layout.transform(v1);
-////                p = getRenderContext().getBasicTransformer().getLayoutTransformer().transform(p);
-//                locationMap.put(v1, p);
-//            }
-//            Point2D q = (Point2D) locationMap.get(v2);
-//            if(q == null) {
-//                q = layout.transform(v2);
-////                q = getRenderContext().getBasicTransformer().getLayoutTransformer().transform(q);
-//                locationMap.put(v2, q);
-//            }
-//
-//            if(p != null && q != null) {
-////              renderer.paintEdge(
-//                        renderer.renderEdge(
-//                        renderContext,
-//                        layout,
-//                        e);
-//            }
-//        }
-//        } catch(ConcurrentModificationException cme) {
-//            repaint();
-//        }
-//        
-//        // paint all the vertices
-//        try {
-//            for(V v : layout.getGraph().getVertices()) {
-//
-//            Point2D p = (Point2D) locationMap.get(v);
-//            if(p == null) {
-//                p = layout.transform(v);
-////                p = getRenderContext().getBasicTransformer().getLayoutTransformer().transform(p);
-//                locationMap.put(v, p);
-//            }
-//            if(p != null) {
-////              renderer.paintVertex(
-//                renderer.renderVertex(
-//                        renderContext,
-//                        layout,
-//                        v);
-//            }
-//        }
-//        } catch(ConcurrentModificationException cme) {
-//            repaint();
-//        }
-        
-//        long delta = System.currentTimeMillis() - start;
-//        paintTimes[paintIndex++] = delta;
-//        paintIndex = paintIndex % paintTimes.length;
-//        paintfps = average(paintTimes);
-        
-        // if there are postRenderers set, do it
-        for(Iterator iterator=postRenderers.iterator(); iterator.hasNext(); ) {
-            Paintable paintable = (Paintable)iterator.next();
-            if(paintable.useTransform()) {
-                paintable.paint(g2d);
-            } else {
-                g2d.setTransform(oldXform);
-                paintable.paint(g2d);
-                g2d.setTransform(newXform);
-            }
-        }
-        g2d.setTransform(oldXform);
-    }
-*/
-
     /**
      * A four-sided shape that represents the visible part of the
      * master view and is drawn in the satellite view
