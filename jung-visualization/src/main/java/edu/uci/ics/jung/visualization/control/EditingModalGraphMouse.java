@@ -9,8 +9,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.geom.Point2D;
-import java.util.Map;
 
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
@@ -24,7 +22,6 @@ import org.apache.commons.collections15.Factory;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.MultiLayerTransformer;
 import edu.uci.ics.jung.visualization.RenderContext;
-import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.annotations.AnnotatingGraphMousePlugin;
 
 public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse 

@@ -3,7 +3,6 @@ package edu.uci.ics.jung.visualization.control;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
-import java.util.Map;
 import java.util.Set;
 
 import javax.swing.AbstractAction;
