@@ -15,13 +15,11 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.awt.print.Printable;
 import java.awt.print.PrinterJob;
 import java.io.File;
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
@@ -37,7 +35,6 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
 import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.TransformerUtils;
 import org.apache.commons.collections15.functors.MapTransformer;
 import org.apache.commons.collections15.map.LazyMap;
 
