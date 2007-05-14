@@ -142,7 +142,7 @@ public class SWTVertexImageShaperDemo extends Composite {
             String name = "/images/topic"+iconNames[i]+".gif";
             ImageLoader loader = new ImageLoader();
             
-            InputStream is = VertexImageShaperDemo.class.getResourceAsStream(name);
+            InputStream is = SWTVertexImageShaperDemo.class.getResourceAsStream(name);
             ImageData[] idataa = loader.load(is);
             ImageData idata = idataa[0];
 //            int tpixel = idata.transparentPixel;
