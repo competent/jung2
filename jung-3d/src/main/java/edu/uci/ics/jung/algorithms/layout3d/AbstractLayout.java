@@ -20,8 +20,8 @@ import java.util.Set;
 import javax.media.j3d.BoundingSphere;
 import javax.vecmath.Point3f;
 
-import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.map.LazyMap;
+import org.apache.commons.collections4.Transformer;
+import org.apache.commons.collections4.map.LazyMap;
 
 import edu.uci.ics.jung.graph.Graph;
 

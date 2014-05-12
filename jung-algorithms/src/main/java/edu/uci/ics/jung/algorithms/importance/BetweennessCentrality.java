@@ -12,12 +12,10 @@ package edu.uci.ics.jung.algorithms.importance;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-
-import org.apache.commons.collections15.Buffer;
-import org.apache.commons.collections15.buffer.UnboundedFifoBuffer;
 
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedGraph;
@@ -82,7 +80,7 @@ public class BetweennessCentrality<V,E> extends AbstractRanker<V,E> {
             decorator.get(s).distance = 0;
 
             Stack<V> stack = new Stack<V>();
-            Buffer<V> queue = new UnboundedFifoBuffer<V>();
+            LinkedList<V> queue = new LinkedList<V>();
             queue.add(s);
 
             while (!queue.isEmpty()) {

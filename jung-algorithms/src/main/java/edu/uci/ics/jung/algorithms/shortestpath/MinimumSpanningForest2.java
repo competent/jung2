@@ -3,9 +3,9 @@ package edu.uci.ics.jung.algorithms.shortestpath;
 import java.util.Collection;
 import java.util.Set;
 
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.functors.ConstantTransformer;
+import org.apache.commons.collections4.Factory;
+import org.apache.commons.collections4.Transformer;
+import org.apache.commons.collections4.functors.ConstantTransformer;
 
 import edu.uci.ics.jung.algorithms.cluster.WeakComponentClusterer;
 import edu.uci.ics.jung.algorithms.filters.FilterUtils;
@@ -29,7 +29,7 @@ public class MinimumSpanningForest2<V,E> {
 	protected Graph<V,E> graph;
 	protected Forest<V,E> forest;
 	protected Transformer<E,Double> weights = 
-		(Transformer<E,Double>)new ConstantTransformer<Double>(1.0);
+		(Transformer<E,Double>)new ConstantTransformer<E,Double>(1.0);
 	
 	/**
 	 * create a Forest from the supplied Graph and supplied Factory, which

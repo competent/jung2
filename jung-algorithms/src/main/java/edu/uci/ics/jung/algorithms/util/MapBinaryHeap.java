@@ -23,7 +23,7 @@ import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.Vector;
 
-import org.apache.commons.collections15.IteratorUtils;
+import org.apache.commons.collections4.IteratorUtils;
 
 /**
  * An array-based binary heap implementation of a priority queue, 

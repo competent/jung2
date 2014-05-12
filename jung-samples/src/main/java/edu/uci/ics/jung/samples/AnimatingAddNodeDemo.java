@@ -30,7 +30,7 @@ import edu.uci.ics.jung.visualization.layout.LayoutTransition;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 import edu.uci.ics.jung.visualization.util.Animator;
 
-import org.apache.commons.collections15.functors.ConstantTransformer;
+import org.apache.commons.collections4.functors.ConstantTransformer;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

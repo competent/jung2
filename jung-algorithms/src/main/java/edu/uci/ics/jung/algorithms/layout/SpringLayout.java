@@ -12,10 +12,10 @@ import edu.uci.ics.jung.algorithms.util.IterativeContext;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.Pair;
 
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.functors.ConstantTransformer;
-import org.apache.commons.collections15.map.LazyMap;
+import org.apache.commons.collections4.Factory;
+import org.apache.commons.collections4.Transformer;
+import org.apache.commons.collections4.functors.ConstantTransformer;
+import org.apache.commons.collections4.map.LazyMap;
 
 import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
@@ -42,7 +42,7 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
     protected double force_multiplier = 1.0 / 3.0;
 
     protected Map<V, SpringVertexData> springVertexData =
-    	LazyMap.decorate(new HashMap<V, SpringVertexData>(),
+    	LazyMap.lazyMap(new HashMap<V, SpringVertexData>(),
     			new Factory<SpringVertexData>() {
 					public SpringVertexData create() {
 						return new SpringVertexData();

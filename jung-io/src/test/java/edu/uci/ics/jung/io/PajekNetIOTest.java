@@ -27,11 +27,11 @@ import java.util.Map;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.TransformerUtils;
-import org.apache.commons.collections15.functors.MapTransformer;
-import org.apache.commons.collections15.map.LazyMap;
+import org.apache.commons.collections4.Factory;
+import org.apache.commons.collections4.Transformer;
+import org.apache.commons.collections4.TransformerUtils;
+import org.apache.commons.collections4.functors.MapTransformer;
+import org.apache.commons.collections4.map.LazyMap;
 
 import edu.uci.ics.jung.algorithms.layout.util.RandomLocationTransformer;
 import edu.uci.ics.jung.graph.DirectedGraph;
@@ -322,11 +322,11 @@ public class PajekNetIOTest extends TestCase
         Dimension d = new Dimension(100, 200);
         Transformer<Number,Point2D> vld = 
         	TransformerUtils.mapTransformer(
-        			LazyMap.decorate(new HashMap<Number,Point2D>(),
+        			LazyMap.lazyMap(new HashMap<Number,Point2D>(),
         					new RandomLocationTransformer<Number>(d)));
         
         PajekNetWriter<Number,Number> pnw = new PajekNetWriter<Number,Number>();
-        pnw.save(graph1, testFilename, gl, MapTransformer.getInstance(nr), vld);
+        pnw.save(graph1, testFilename, gl, MapTransformer.mapTransformer(nr), vld);
         
         Graph<Number,Number> graph2 = pnr.load(testFilename, graphFactory);
         Transformer<Number, String> pl = pnr.getVertexLabeller();

@@ -24,9 +24,9 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.functors.ChainedTransformer;
-import org.apache.commons.collections15.functors.ConstantTransformer;
+import org.apache.commons.collections4.Transformer;
+import org.apache.commons.collections4.functors.ChainedTransformer;
+import org.apache.commons.collections4.functors.ConstantTransformer;
 
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
@@ -90,7 +90,7 @@ public class VertexLabelAsShapeDemo extends JApplet {
         vv.getRenderContext().setVertexLabelTransformer(
         		// this chains together Transformers so that the html tags
         		// are prepended to the toString method output
-        		new ChainedTransformer<String,String>(new Transformer[]{
+        		new ChainedTransformer<String>(new Transformer[]{
         		new ToStringLabeller<String>(),
         		new Transformer<String,String>() {
 					public String transform(String input) {

@@ -14,8 +14,8 @@ import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.map.LazyMap;
+import org.apache.commons.collections4.Factory;
+import org.apache.commons.collections4.map.LazyMap;
 
 import edu.uci.ics.jung.algorithms.layout.util.RandomLocationTransformer;
 import edu.uci.ics.jung.algorithms.util.IterativeContext;
@@ -53,7 +53,7 @@ public class FRLayout2<V, E> extends AbstractLayout<V, E> implements IterativeCo
     private int maxIterations = 700;
     
     private Map<V, Point2D> frVertexData = 
-    	LazyMap.decorate(new HashMap<V,Point2D>(), new Factory<Point2D>() {
+    	LazyMap.lazyMap(new HashMap<V,Point2D>(), new Factory<Point2D>() {
     		public Point2D create() {
     			return new Point2D.Double();
     		}});

@@ -11,7 +11,7 @@
  */
 package edu.uci.ics.jung.io;
 
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections4.Transformer;
 
 /**
  * Maintains information relating to data for the specified type.

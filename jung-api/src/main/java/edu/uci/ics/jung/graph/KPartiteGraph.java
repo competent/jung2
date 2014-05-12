@@ -13,7 +13,7 @@ package edu.uci.ics.jung.graph;
 
 import java.util.Collection;
 
-import org.apache.commons.collections15.Predicate;
+import org.apache.commons.collections4.Predicate;
 
 /**
  * An interface for graphs whose vertices are each members of one of 2 or more 

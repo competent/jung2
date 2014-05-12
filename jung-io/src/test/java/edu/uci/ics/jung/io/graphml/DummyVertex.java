@@ -1,6 +1,6 @@
 package edu.uci.ics.jung.io.graphml;
 
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections4.Transformer;
 
 public class DummyVertex extends DummyGraphObjectBase {
     

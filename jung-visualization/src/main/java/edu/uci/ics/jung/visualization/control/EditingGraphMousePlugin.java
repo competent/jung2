@@ -14,7 +14,7 @@ import java.awt.geom.Point2D;
 
 import javax.swing.JComponent;
 
-import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections4.Factory;
 
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;

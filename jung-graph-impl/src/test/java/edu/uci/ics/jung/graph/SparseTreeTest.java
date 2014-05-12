@@ -1,6 +1,6 @@
 package edu.uci.ics.jung.graph;
 
-import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections4.Factory;
 
 
 public class SparseTreeTest extends AbstractSparseTreeTest {

@@ -10,7 +10,7 @@
 
 package edu.uci.ics.jung.io.graphml.parser;
 
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections4.Transformer;
 
 import edu.uci.ics.jung.graph.Hypergraph;
 import edu.uci.ics.jung.io.graphml.EdgeMetadata;

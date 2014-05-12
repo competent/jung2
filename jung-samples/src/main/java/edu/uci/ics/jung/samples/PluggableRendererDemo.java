@@ -48,11 +48,11 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JRadioButton;
 
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.Predicate;
-import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.functors.ConstantTransformer;
-import org.apache.commons.collections15.functors.MapTransformer;
+import org.apache.commons.collections4.Factory;
+import org.apache.commons.collections4.Predicate;
+import org.apache.commons.collections4.Transformer;
+import org.apache.commons.collections4.functors.ConstantTransformer;
+import org.apache.commons.collections4.functors.MapTransformer;
 
 import edu.uci.ics.jung.algorithms.generators.random.MixedRandomGraphGenerator;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
@@ -350,7 +350,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         Graph<Integer,Number> g = 
         	MixedRandomGraphGenerator.<Integer,Number>generateMixedRandomGraph(graphFactory, vertexFactory, edgeFactory,
         		edge_weight, 20, false, seedVertices);
-        es = new NumberFormattingTransformer<Number>(MapTransformer.getInstance(edge_weight));
+        es = new NumberFormattingTransformer<Number>(MapTransformer.mapTransformer(edge_weight));
         
         // collect the seeds used to define the random graph
 
@@ -371,7 +371,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         }
         VoltageScorer<Integer, Number> voltage_scores = 
             new VoltageScorer<Integer, Number>(g, 
-                    MapTransformer.getInstance(edge_weight), sources, sinks);
+                    MapTransformer.mapTransformer(edge_weight), sources, sinks);
         voltage_scores.evaluate();
         voltages = new VertexScoreTransformer<Integer, Double>(voltage_scores);
         vs = new NumberFormattingTransformer<Integer>(voltages);

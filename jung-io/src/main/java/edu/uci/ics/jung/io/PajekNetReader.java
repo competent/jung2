@@ -21,9 +21,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.Predicate;
-import org.apache.commons.collections15.functors.OrPredicate;
+import org.apache.commons.collections4.Factory;
+import org.apache.commons.collections4.Predicate;
+import org.apache.commons.collections4.functors.OrPredicate;
 
 import edu.uci.ics.jung.algorithms.util.MapSettableTransformer;
 import edu.uci.ics.jung.algorithms.util.SettableTransformer;
@@ -115,7 +115,7 @@ public class PajekNetReader<G extends Graph<V,E>,V,E>
     private static final Predicate<String> a_pred = new StartsWithPredicate("*arcs");
     private static final Predicate<String> e_pred = new StartsWithPredicate("*edges");
     private static final Predicate<String> t_pred = new StartsWithPredicate("*");
-    private static final Predicate<String> c_pred = OrPredicate.getInstance(a_pred, e_pred);
+    private static final Predicate<String> c_pred = OrPredicate.orPredicate(a_pred, e_pred);
     protected static final Predicate<String> l_pred = ListTagPred.getInstance();
     
     /**

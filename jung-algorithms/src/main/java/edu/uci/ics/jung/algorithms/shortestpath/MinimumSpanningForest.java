@@ -6,9 +6,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.functors.ConstantTransformer;
-import org.apache.commons.collections15.map.LazyMap;
+import org.apache.commons.collections4.Factory;
+import org.apache.commons.collections4.functors.ConstantTransformer;
+import org.apache.commons.collections4.map.LazyMap;
 
 import edu.uci.ics.jung.graph.Forest;
 import edu.uci.ics.jung.graph.Graph;
@@ -101,7 +101,7 @@ public class MinimumSpanningForest<V,E> {
         }
         this.graph = graph;
         this.forest = forest;
-        this.weights = LazyMap.decorate(new HashMap<E,Double>(),
+        this.weights = LazyMap.lazyMap(new HashMap<E,Double>(),
                 new ConstantTransformer(1.0));
         Set<E> unfinishedEdges = new HashSet<E>(graph.getEdges());
         if(graph.getVertices().contains(root)) {

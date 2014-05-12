@@ -18,7 +18,7 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 
-import org.apache.commons.collections15.functors.ConstantTransformer;
+import org.apache.commons.collections4.functors.ConstantTransformer;
 
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedSparseMultigraph;

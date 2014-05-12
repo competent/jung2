@@ -18,10 +18,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.functors.ChainedTransformer;
-import org.apache.commons.collections15.functors.CloneTransformer;
-import org.apache.commons.collections15.map.LazyMap;
+import org.apache.commons.collections4.Transformer;
+import org.apache.commons.collections4.functors.ChainedTransformer;
+import org.apache.commons.collections4.functors.CloneTransformer;
+import org.apache.commons.collections4.map.LazyMap;
 
 import edu.uci.ics.jung.graph.Graph;
 
@@ -48,7 +48,7 @@ abstract public class AbstractLayout<V, E> implements Layout<V,E> {
 	protected boolean initialized;
     
     protected Map<V, Point2D> locations = 
-    	LazyMap.decorate(new HashMap<V, Point2D>(),
+    	LazyMap.lazyMap(new HashMap<V, Point2D>(),
     			new Transformer<V,Point2D>() {
 					public Point2D transform(V arg0) {
 						return new Point2D.Double();
@@ -71,9 +71,10 @@ abstract public class AbstractLayout<V, E> implements Layout<V,E> {
     @SuppressWarnings("unchecked")
     protected AbstractLayout(Graph<V,E> graph, Transformer<V,Point2D> initializer) {
 		this.graph = graph;
+		Transformer[] transformers = new Transformer[]{initializer, CloneTransformer.cloneTransformer()};
 		Transformer<V, ? extends Object> chain = 
-			ChainedTransformer.getInstance(initializer, CloneTransformer.getInstance());
-		this.locations = LazyMap.decorate(new HashMap<V,Point2D>(), (Transformer<V,Point2D>)chain);
+			ChainedTransformer.chainedTransformer(transformers);
+		this.locations = LazyMap.lazyMap(new HashMap<V,Point2D>(), (Transformer<V,Point2D>)chain);
 		initialized = true;
 	}
 	
@@ -85,9 +86,10 @@ abstract public class AbstractLayout<V, E> implements Layout<V,E> {
 	@SuppressWarnings("unchecked")
     protected AbstractLayout(Graph<V,E> graph, Transformer<V,Point2D> initializer, Dimension size) {
 		this.graph = graph;
+		Transformer[] transformers = new Transformer[]{initializer, CloneTransformer.cloneTransformer()};
 		Transformer<V, ? extends Object> chain = 
-			ChainedTransformer.getInstance(initializer, CloneTransformer.getInstance());
-		this.locations = LazyMap.decorate(new HashMap<V,Point2D>(), (Transformer<V,Point2D>)chain);
+			ChainedTransformer.chainedTransformer(transformers);
+		this.locations = LazyMap.lazyMap(new HashMap<V,Point2D>(), (Transformer<V,Point2D>)chain);
 		this.size = size;
 	}
     
@@ -143,9 +145,10 @@ abstract public class AbstractLayout<V, E> implements Layout<V,E> {
     	if(this.equals(initializer)) {
     		throw new IllegalArgumentException("Layout cannot be initialized with itself");
     	}
+		Transformer[] transformers = new Transformer[]{initializer, CloneTransformer.cloneTransformer()};
 		Transformer<V, ? extends Object> chain = 
-			ChainedTransformer.getInstance(initializer, CloneTransformer.getInstance());
-    	this.locations = LazyMap.decorate(new HashMap<V,Point2D>(), (Transformer<V, Point2D>)chain);
+			ChainedTransformer.chainedTransformer(transformers);
+    	this.locations = LazyMap.lazyMap(new HashMap<V,Point2D>(), (Transformer<V, Point2D>)chain);
     	initialized = true;
     }
     

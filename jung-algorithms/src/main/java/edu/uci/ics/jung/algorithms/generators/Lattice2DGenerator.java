@@ -13,7 +13,7 @@ package edu.uci.ics.jung.algorithms.generators;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections4.Factory;
 
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.EdgeType;

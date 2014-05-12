@@ -21,8 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.map.LazyMap;
+import org.apache.commons.collections4.Factory;
+import org.apache.commons.collections4.map.LazyMap;
 
 import edu.uci.ics.jung.graph.Graph;
 
@@ -39,7 +39,7 @@ public class CircleLayout<V, E> extends AbstractLayout<V,E> {
 	private List<V> vertex_ordered_list;
 	
 	Map<V, CircleVertexData> circleVertexDataMap =
-			LazyMap.decorate(new HashMap<V,CircleVertexData>(), 
+			LazyMap.lazyMap(new HashMap<V,CircleVertexData>(), 
 			new Factory<CircleVertexData>() {
 				public CircleVertexData create() {
 					return new CircleVertexData();

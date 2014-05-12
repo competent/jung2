@@ -11,7 +11,7 @@
  */
 package edu.uci.ics.jung.algorithms.scoring.util;
 
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections4.Transformer;
 
 /**
  * A <code>Transformer<VEPair,Number></code> that delegates its operation to a

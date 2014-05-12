@@ -13,7 +13,7 @@ package edu.uci.ics.jung.visualization.decorators;
 
 import java.awt.Shape;
 
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections4.Transformer;
 
 
 

@@ -15,8 +15,8 @@ package edu.uci.ics.jung.algorithms.transformation;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.Predicate;
+import org.apache.commons.collections4.Factory;
+import org.apache.commons.collections4.Predicate;
 
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Hypergraph;

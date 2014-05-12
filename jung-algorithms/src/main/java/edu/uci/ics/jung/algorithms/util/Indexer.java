@@ -11,8 +11,8 @@ package edu.uci.ics.jung.algorithms.util;
 
 import java.util.Collection;
 
-import org.apache.commons.collections15.BidiMap;
-import org.apache.commons.collections15.bidimap.DualHashBidiMap;
+import org.apache.commons.collections4.BidiMap;
+import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 
 /**
  * A class providing static methods useful for improving the

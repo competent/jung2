@@ -11,7 +11,7 @@
  */
 package edu.uci.ics.jung.algorithms.scoring.util;
 
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections4.Transformer;
 
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.EdgeType;
@@ -40,7 +40,7 @@ public class UniformInOut<V,E> implements Transformer<VEPair<V,E>, Double>
     }
     
     /**
-     * @see org.apache.commons.collections15.Transformer#transform(Object)
+     * @see org.apache.commons.collections4.Transformer#transform(Object)
      * @throws IllegalArgumentException
      */
     public Double transform(VEPair<V,E> ve_pair)

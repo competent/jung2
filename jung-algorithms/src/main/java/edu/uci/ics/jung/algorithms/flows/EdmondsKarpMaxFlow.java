@@ -13,14 +13,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections15.Buffer;
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.buffer.UnboundedFifoBuffer;
+import org.apache.commons.collections4.Factory;
+import org.apache.commons.collections4.Transformer;
 
 import edu.uci.ics.jung.algorithms.util.IterativeProcess;
 import edu.uci.ics.jung.graph.DirectedGraph;
@@ -128,7 +127,7 @@ public class EdmondsKarpMaxFlow<V,E> extends IterativeProcess {
         mSinkPartitionNodes.addAll(mFlowGraph.getVertices());
 
         Set<E> visitedEdgesMap = new HashSet<E>();
-        Buffer<V> queue = new UnboundedFifoBuffer<V>();
+        LinkedList<V> queue = new LinkedList<V>();
         queue.add(source);
 
         while (!queue.isEmpty()) {

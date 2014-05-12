@@ -16,7 +16,7 @@ import java.awt.GradientPaint;
 import java.awt.Paint;
 import java.awt.geom.Point2D;
 
-import org.apache.commons.collections15.Predicate;
+import org.apache.commons.collections4.Predicate;
 
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.util.SelfLoopEdgePredicate;
@@ -39,7 +39,7 @@ import edu.uci.ics.jung.visualization.transform.BidirectionalTransformer;
  * @author Joshua O'Madadhain
  */
 public class GradientEdgePaintTransformer<V, E> 
-	implements org.apache.commons.collections15.Transformer<E,Paint>
+	implements org.apache.commons.collections4.Transformer<E,Paint>
 {
     protected Color c1;
     protected Color c2;

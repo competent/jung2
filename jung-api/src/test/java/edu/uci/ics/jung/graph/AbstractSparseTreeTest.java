@@ -2,7 +2,7 @@ package edu.uci.ics.jung.graph;
 
 import junit.framework.TestCase;
 
-import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections4.Factory;
 
 
 public abstract class AbstractSparseTreeTest extends TestCase {

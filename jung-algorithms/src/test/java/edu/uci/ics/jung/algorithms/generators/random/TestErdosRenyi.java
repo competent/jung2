@@ -4,7 +4,7 @@ package edu.uci.ics.jung.algorithms.generators.random;
  * @author W. Giordano, Scott White
  */
 
-import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections4.Factory;
 
 import edu.uci.ics.jung.algorithms.generators.random.ErdosRenyiGenerator;
 import edu.uci.ics.jung.graph.Graph;

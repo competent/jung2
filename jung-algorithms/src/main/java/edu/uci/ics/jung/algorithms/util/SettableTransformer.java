@@ -11,7 +11,7 @@
  */
 package edu.uci.ics.jung.algorithms.util;
 
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections4.Transformer;
 
 /**
  * An interface for classes that can set the value to be returned (from <code>transform()</code>)

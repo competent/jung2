@@ -8,7 +8,7 @@
  */
 package edu.uci.ics.jung.visualization.util;
 
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections4.Transformer;
 
 /**
  * A utility to wrap long lines, creating html strings

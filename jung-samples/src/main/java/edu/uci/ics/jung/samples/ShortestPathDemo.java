@@ -25,8 +25,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections4.Factory;
+import org.apache.commons.collections4.Transformer;
 
 import edu.uci.ics.jung.algorithms.generators.random.EppsteinPowerLawGenerator;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;

@@ -19,10 +19,10 @@ import javax.swing.CellRendererPane;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 
-import org.apache.commons.collections15.Predicate;
-import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.functors.ConstantTransformer;
-import org.apache.commons.collections15.functors.TruePredicate;
+import org.apache.commons.collections4.Predicate;
+import org.apache.commons.collections4.Transformer;
+import org.apache.commons.collections4.functors.ConstantTransformer;
+import org.apache.commons.collections4.functors.TruePredicate;
 
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.graph.Graph;
@@ -47,7 +47,7 @@ import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
     
 	protected float arrowPlacementTolerance = 1;
-    protected Predicate<Context<Graph<V,E>,V>> vertexIncludePredicate = TruePredicate.getInstance();
+    protected Predicate<Context<Graph<V,E>,V>> vertexIncludePredicate = TruePredicate.truePredicate();
     protected Transformer<V,Stroke> vertexStrokeTransformer = 
     	new ConstantTransformer(new BasicStroke(1.0f));
     
@@ -71,7 +71,7 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
         new DirectionalEdgeArrowTransformer<V,E>(10, 8, 4);
     
     protected Predicate<Context<Graph<V,E>,E>> edgeArrowPredicate = new DirectedEdgeArrowPredicate<V,E>();
-    protected Predicate<Context<Graph<V,E>,E>> edgeIncludePredicate = TruePredicate.getInstance();
+    protected Predicate<Context<Graph<V,E>,E>> edgeIncludePredicate = TruePredicate.truePredicate();
     protected Transformer<E,Font> edgeFontTransformer =
         new ConstantTransformer(new Font("Helvetica", Font.PLAIN, 12));
     protected Transformer<Context<Graph<V,E>,E>,Number> edgeLabelClosenessTransformer = 
@@ -236,7 +236,7 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
     }
 
     /**
-     * @see edu.uci.ics.jung.visualization.RenderContext#setEdgeIncludePredicate(org.apache.commons.collections15.Predicate)
+     * @see edu.uci.ics.jung.visualization.RenderContext#setEdgeIncludePredicate(org.apache.commons.collections4.Predicate)
      */
     public void setEdgeIncludePredicate(Predicate<Context<Graph<V,E>,E>> edgeIncludePredicate) {
         this.edgeIncludePredicate = edgeIncludePredicate;
@@ -500,7 +500,7 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
     }
 
     /**
-     * @see edu.uci.ics.jung.visualization.RenderContext#setVertexIncludePredicate(org.apache.commons.collections15.Predicate)
+     * @see edu.uci.ics.jung.visualization.RenderContext#setVertexIncludePredicate(org.apache.commons.collections4.Predicate)
      */
     public void setVertexIncludePredicate(Predicate<Context<Graph<V,E>,V>> vertexIncludePredicate) {
         this.vertexIncludePredicate = vertexIncludePredicate;

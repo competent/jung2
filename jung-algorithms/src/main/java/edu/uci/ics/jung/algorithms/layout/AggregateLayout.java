@@ -16,7 +16,7 @@ import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections4.Transformer;
 
 import edu.uci.ics.jung.algorithms.util.IterativeContext;
 import edu.uci.ics.jung.graph.Graph;
@@ -174,7 +174,7 @@ public class AggregateLayout<V, E> implements Layout<V,E>, IterativeContext {
 
 	/**
 	 * @param initializer
-	 * @see edu.uci.ics.jung.algorithms.layout.Layout#setInitializer(org.apache.commons.collections15.Transformer)
+	 * @see edu.uci.ics.jung.algorithms.layout.Layout#setInitializer(org.apache.commons.collections4.Transformer)
 	 */
 	public void setInitializer(Transformer<V, Point2D> initializer) {
 		delegate.setInitializer(initializer);
@@ -226,7 +226,7 @@ public class AggregateLayout<V, E> implements Layout<V,E>, IterativeContext {
 	 * by the sublayouts, and then by the base layout if no sublayouts operate
 	 * on this vertex.
 	 * @return the location of the vertex
-	 * @see org.apache.commons.collections15.Transformer#transform(java.lang.Object)
+	 * @see org.apache.commons.collections4.Transformer#transform(java.lang.Object)
 	 */
 	public Point2D transform(V v) {
 		boolean wasInSublayout = false;

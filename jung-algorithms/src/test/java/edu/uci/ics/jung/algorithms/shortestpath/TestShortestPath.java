@@ -14,10 +14,10 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 
-import org.apache.commons.collections15.BidiMap;
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.functors.MapTransformer;
+import org.apache.commons.collections4.BidiMap;
+import org.apache.commons.collections4.Factory;
+import org.apache.commons.collections4.Transformer;
+import org.apache.commons.collections4.functors.MapTransformer;
 
 import edu.uci.ics.jung.algorithms.util.Indexer;
 import edu.uci.ics.jung.graph.DirectedGraph;
@@ -143,7 +143,7 @@ public class TestShortestPath extends TestCase
     @Override
     protected void setUp() {
     	edgeWeights = new HashMap<Integer,Number>();
-        nev = MapTransformer.<Integer,Number>getInstance(edgeWeights);
+        nev = MapTransformer.<Integer,Number>mapTransformer(edgeWeights);
 		dg = new DirectedSparseMultigraph<String,Integer>();
 		for(int i=0; i<dg_distances.length; i++) {
 			dg.addVertex(vertexFactoryDG.create());

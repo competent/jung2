@@ -26,8 +26,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
-import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.TransformerUtils;
+import org.apache.commons.collections4.Transformer;
+import org.apache.commons.collections4.TransformerUtils;
 import org.xml.sax.SAXException;
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph;

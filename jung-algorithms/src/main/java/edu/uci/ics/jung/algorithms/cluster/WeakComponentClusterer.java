@@ -11,11 +11,10 @@ package edu.uci.ics.jung.algorithms.cluster;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Set;
 
-import org.apache.commons.collections15.Buffer;
-import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.buffer.UnboundedFifoBuffer;
+import org.apache.commons.collections4.Transformer;
 
 import edu.uci.ics.jung.graph.Graph;
 
@@ -51,7 +50,7 @@ public class WeakComponentClusterer<V,E> implements Transformer<Graph<V,E>, Set<
             unvisitedVertices.remove(root);
             cluster.add(root);
 
-            Buffer<V> queue = new UnboundedFifoBuffer<V>();
+            LinkedList<V> queue = new LinkedList<V>();
             queue.add(root);
 
             while (!queue.isEmpty()) {

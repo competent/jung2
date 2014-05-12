@@ -14,7 +14,7 @@ package edu.uci.ics.jung.graph;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections4.Factory;
 
 import edu.uci.ics.jung.graph.DirectedOrderedSparseMultigraph;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;

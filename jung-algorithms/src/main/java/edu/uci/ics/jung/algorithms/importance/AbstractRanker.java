@@ -18,8 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.map.LazyMap;
+import org.apache.commons.collections4.Factory;
+import org.apache.commons.collections4.map.LazyMap;
 
 import edu.uci.ics.jung.algorithms.util.IterativeProcess;
 import edu.uci.ics.jung.graph.Graph;
@@ -49,14 +49,14 @@ public abstract class AbstractRanker<V,E> extends IterativeProcess {
     private boolean mRankEdges;
     private boolean mNormalizeRankings;
     protected Map<Object,Map<V, Number>> vertexRankScores = 
-    	LazyMap.decorate(
+    	LazyMap.lazyMap(
     			new HashMap<Object,Map<V,Number>>(),
     			new Factory<Map<V,Number>>() {
 					public Map<V,Number> create() {
 						return new HashMap<V,Number>();
 					}});
     protected Map<Object,Map<E, Number>> edgeRankScores = 
-    	LazyMap.decorate(
+    	LazyMap.lazyMap(
     			new HashMap<Object,Map<E,Number>>(),
     			new Factory<Map<E,Number>>() {
 					public Map<E,Number> create() {

@@ -13,8 +13,8 @@ import edu.uci.ics.jung.algorithms.layout.util.RandomLocationTransformer;
 import edu.uci.ics.jung.algorithms.util.IterativeContext;
 import edu.uci.ics.jung.graph.Graph;
 
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.map.LazyMap;
+import org.apache.commons.collections4.Factory;
+import org.apache.commons.collections4.map.LazyMap;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ import java.util.Map;
 public class ISOMLayout<V, E> extends AbstractLayout<V,E> implements IterativeContext {
 
 	Map<V, ISOMVertexData> isomVertexData =
-		LazyMap.decorate(new HashMap<V, ISOMVertexData>(),
+		LazyMap.lazyMap(new HashMap<V, ISOMVertexData>(),
 				new Factory<ISOMVertexData>() {
 					public ISOMVertexData create() {
 						return new ISOMVertexData();

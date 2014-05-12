@@ -45,11 +45,11 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.functors.ConstantTransformer;
-import org.apache.commons.collections15.functors.MapTransformer;
-import org.apache.commons.collections15.map.LazyMap;
+import org.apache.commons.collections4.Factory;
+import org.apache.commons.collections4.Transformer;
+import org.apache.commons.collections4.functors.ConstantTransformer;
+import org.apache.commons.collections4.functors.MapTransformer;
+import org.apache.commons.collections4.map.LazyMap;
 
 import edu.uci.ics.jung.algorithms.cluster.EdgeBetweennessClusterer;
 import edu.uci.ics.jung.algorithms.layout.AggregateLayout;
@@ -80,10 +80,10 @@ public class ClusteringDemo extends JApplet {
 //	Factory<Graph<Number,Number>> graphFactory;
 	
 	Map<Number,Paint> vertexPaints = 
-		LazyMap.<Number,Paint>decorate(new HashMap<Number,Paint>(),
+		LazyMap.<Number,Paint>lazyMap(new HashMap<Paint,Number>(),
 				new ConstantTransformer(Color.white));
 	Map<Number,Paint> edgePaints =
-	LazyMap.<Number,Paint>decorate(new HashMap<Number,Paint>(),
+	LazyMap.<Number,Paint>lazyMap(new HashMap<Paint,Number>(),
 			new ConstantTransformer(Color.blue));
 
 	public final Color[] similarColors =
@@ -154,7 +154,7 @@ public class ClusteringDemo extends JApplet {
 		vv = new VisualizationViewer<Number,Number>(layout);
 		vv.setBackground( Color.white );
 		//Tell the renderer to use our own customized color rendering
-		vv.getRenderContext().setVertexFillPaintTransformer(MapTransformer.<Number,Paint>getInstance(vertexPaints));
+		vv.getRenderContext().setVertexFillPaintTransformer(MapTransformer.<Number,Paint>mapTransformer(vertexPaints));
 		vv.getRenderContext().setVertexDrawPaintTransformer(new Transformer<Number,Paint>() {
 			public Paint transform(Number v) {
 				if(vv.getPickedVertexState().isPicked(v)) {
@@ -165,7 +165,7 @@ public class ClusteringDemo extends JApplet {
 			}
 		});
 
-		vv.getRenderContext().setEdgeDrawPaintTransformer(MapTransformer.<Number,Paint>getInstance(edgePaints));
+		vv.getRenderContext().setEdgeDrawPaintTransformer(MapTransformer.<Number,Paint>mapTransformer(edgePaints));
 
 		vv.getRenderContext().setEdgeStrokeTransformer(new Transformer<Number,Stroke>() {
                 protected final Stroke THIN = new BasicStroke(1);

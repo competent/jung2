@@ -24,9 +24,9 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.apache.commons.collections15.BidiMap;
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections4.BidiMap;
+import org.apache.commons.collections4.Factory;
+import org.apache.commons.collections4.Transformer;
 import org.xml.sax.SAXException;
 
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;

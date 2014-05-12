@@ -17,8 +17,8 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.comparators.ComparableComparator;
+import org.apache.commons.collections4.Factory;
+import org.apache.commons.collections4.comparators.ComparableComparator;
 
 import edu.uci.ics.jung.graph.util.Pair;
 

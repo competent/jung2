@@ -34,9 +34,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.functors.MapTransformer;
-import org.apache.commons.collections15.map.LazyMap;
+import org.apache.commons.collections4.Factory;
+import org.apache.commons.collections4.functors.MapTransformer;
+import org.apache.commons.collections4.map.LazyMap;
 
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
@@ -146,11 +146,11 @@ public class GraphEditorDemo extends JApplet implements Printable {
         vv =  new VisualizationViewer<Number,Number>(layout);
         vv.setBackground(Color.white);
 
-        vv.getRenderContext().setVertexLabelTransformer(MapTransformer.<Number,String>getInstance(
-        		LazyMap.<Number,String>decorate(new HashMap<Number,String>(), new ToStringLabeller<Number>())));
+        vv.getRenderContext().setVertexLabelTransformer(MapTransformer.<Number,String>mapTransformer(
+        		LazyMap.<String,Number>lazyMap(new HashMap<Number,String>(), new ToStringLabeller<Number>())));
         
-        vv.getRenderContext().setEdgeLabelTransformer(MapTransformer.<Number,String>getInstance(
-        		LazyMap.<Number,String>decorate(new HashMap<Number,String>(), new ToStringLabeller<Number>())));
+        vv.getRenderContext().setEdgeLabelTransformer(MapTransformer.<Number,String>mapTransformer(
+        		LazyMap.<String,Number>lazyMap(new HashMap<Number,String>(), new ToStringLabeller<Number>())));
 
         vv.setVertexToolTipTransformer(vv.getRenderContext().getVertexLabelTransformer());
         

@@ -12,7 +12,7 @@ package edu.uci.ics.jung.algorithms.layout3d;
 import javax.media.j3d.BoundingSphere;
 import javax.vecmath.Point3f;
 
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections4.Transformer;
 
 import edu.uci.ics.jung.graph.Graph;
 

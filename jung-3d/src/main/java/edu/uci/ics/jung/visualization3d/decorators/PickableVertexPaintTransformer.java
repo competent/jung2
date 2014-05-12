@@ -13,7 +13,7 @@ package edu.uci.ics.jung.visualization3d.decorators;
 
 import java.awt.Paint;
 
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections4.Transformer;
 
 import edu.uci.ics.jung.visualization.picking.PickedInfo;
 

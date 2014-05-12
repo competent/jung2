@@ -18,8 +18,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.map.LazyMap;
+import org.apache.commons.collections4.Transformer;
+import org.apache.commons.collections4.map.LazyMap;
 
 import edu.uci.ics.jung.graph.Forest;
 import edu.uci.ics.jung.graph.Graph;
@@ -38,7 +38,7 @@ public class TreeLayout<V,E> implements Layout<V,E> {
 	protected Map<V,Integer> basePositions = new HashMap<V,Integer>();
 
     protected Map<V, Point2D> locations = 
-    	LazyMap.decorate(new HashMap<V, Point2D>(),
+    	LazyMap.lazyMap(new HashMap<V, Point2D>(),
     			new Transformer<V,Point2D>() {
 					public Point2D transform(V arg0) {
 						return new Point2D.Double();

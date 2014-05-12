@@ -11,7 +11,7 @@
  */
 package edu.uci.ics.jung.algorithms.scoring.util;
 
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections4.Transformer;
 
 import edu.uci.ics.jung.graph.Hypergraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
@@ -41,7 +41,7 @@ public class UniformDegreeWeight<V, E> implements
     }
 
 	/**
-	 * @see org.apache.commons.collections15.Transformer#transform(java.lang.Object)
+	 * @see org.apache.commons.collections4.Transformer#transform(java.lang.Object)
 	 */
 	public Double transform(VEPair<V, E> ve_pair) 
 	{

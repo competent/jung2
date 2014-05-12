@@ -12,8 +12,8 @@ import edu.uci.ics.jung.algorithms.util.IterativeContext;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.Pair;
 
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.map.LazyMap;
+import org.apache.commons.collections4.Factory;
+import org.apache.commons.collections4.map.LazyMap;
 
 import java.awt.Dimension;
 import java.awt.geom.Point2D;
@@ -47,7 +47,7 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
     private int mMaxIterations = 700;
 
     private Map<V, FRVertexData> frVertexData =
-    	LazyMap.decorate(new HashMap<V,FRVertexData>(), new Factory<FRVertexData>() {
+    	LazyMap.lazyMap(new HashMap<V,FRVertexData>(), new Factory<FRVertexData>() {
     		public FRVertexData create() {
     			return new FRVertexData();
     		}});

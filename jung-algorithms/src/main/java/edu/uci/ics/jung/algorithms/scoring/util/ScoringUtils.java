@@ -13,7 +13,7 @@ package edu.uci.ics.jung.algorithms.scoring.util;
 
 import java.util.Collection;
 
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections4.Transformer;
 
 import edu.uci.ics.jung.algorithms.scoring.HITS;
 

@@ -13,7 +13,7 @@ package edu.uci.ics.jung.algorithms.layout;
 import java.awt.Dimension;
 import java.awt.geom.Point2D;
 
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections4.Transformer;
 
 import edu.uci.ics.jung.algorithms.util.IterativeContext;
 import edu.uci.ics.jung.graph.Graph;
@@ -69,7 +69,7 @@ public abstract class LayoutDecorator<V, E> implements Layout<V, E>, IterativeCo
 
 	/**
 	 * @param initializer
-	 * @see edu.uci.ics.jung.algorithms.layout.Layout#setInitializer(org.apache.commons.collections15.Transformer)
+	 * @see edu.uci.ics.jung.algorithms.layout.Layout#setInitializer(org.apache.commons.collections4.Transformer)
 	 */
 	public void setInitializer(Transformer<V, Point2D> initializer) {
 		delegate.setInitializer(initializer);

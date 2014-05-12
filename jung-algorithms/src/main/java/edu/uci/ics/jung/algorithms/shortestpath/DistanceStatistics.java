@@ -10,7 +10,7 @@
 package edu.uci.ics.jung.algorithms.shortestpath;
 import java.util.Collection;
 
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections4.Transformer;
 
 import edu.uci.ics.jung.algorithms.scoring.ClosenessCentrality;
 import edu.uci.ics.jung.algorithms.scoring.util.VertexScoreTransformer;

@@ -22,8 +22,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections4.Factory;
+import org.apache.commons.collections4.Transformer;
 import org.xml.sax.SAXException;
 
 import edu.uci.ics.jung.algorithms.layout.FRLayout;

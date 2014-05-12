@@ -17,7 +17,7 @@ import java.util.Random;
 import javax.media.j3d.BoundingSphere;
 import javax.vecmath.Point3f;
 
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections4.Transformer;
 
 /**
  * Transforms the input type into a random location within

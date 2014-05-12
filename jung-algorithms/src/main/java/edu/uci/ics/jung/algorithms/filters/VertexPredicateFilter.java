@@ -13,7 +13,7 @@ package edu.uci.ics.jung.algorithms.filters;
 
 import java.util.Collection;
 
-import org.apache.commons.collections15.Predicate;
+import org.apache.commons.collections4.Predicate;
 
 import edu.uci.ics.jung.graph.Graph;
 

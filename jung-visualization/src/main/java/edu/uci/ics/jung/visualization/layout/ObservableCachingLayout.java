@@ -16,10 +16,10 @@ import java.util.Map;
 
 import javax.swing.event.ChangeListener;
 
-import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.functors.ChainedTransformer;
-import org.apache.commons.collections15.functors.CloneTransformer;
-import org.apache.commons.collections15.map.LazyMap;
+import org.apache.commons.collections4.Transformer;
+import org.apache.commons.collections4.functors.ChainedTransformer;
+import org.apache.commons.collections4.functors.CloneTransformer;
+import org.apache.commons.collections4.map.LazyMap;
 
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.LayoutDecorator;
@@ -47,8 +47,8 @@ public class ObservableCachingLayout<V, E> extends LayoutDecorator<V,E> implemen
 
     public ObservableCachingLayout(Layout<V, E> delegate) {
     	super(delegate);
-    	this.locationMap = LazyMap.<V,Point2D>decorate(new HashMap<V,Point2D>(), 
-    			new ChainedTransformer<V, Point2D>(new Transformer[]{delegate, CloneTransformer.<Point2D>getInstance()}));
+    	this.locationMap = (Map<V,Point2D>)LazyMap.<Point2D,Point2D>lazyMap(new HashMap<Point2D,Point2D>(), 
+    			new ChainedTransformer<Point2D>(new Transformer[]{delegate, CloneTransformer.<Point2D>cloneTransformer()}));
     }
     
     /**

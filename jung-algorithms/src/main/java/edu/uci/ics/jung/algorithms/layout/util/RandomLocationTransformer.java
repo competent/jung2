@@ -16,7 +16,7 @@ import java.awt.geom.Point2D;
 import java.util.Date;
 import java.util.Random;
 
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections4.Transformer;
 
 /**
  * Transforms the input type into a random location within

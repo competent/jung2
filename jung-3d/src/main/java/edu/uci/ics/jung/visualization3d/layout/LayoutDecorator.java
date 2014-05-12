@@ -13,7 +13,7 @@ package edu.uci.ics.jung.visualization3d.layout;
 import javax.media.j3d.BoundingSphere;
 import javax.vecmath.Point3f;
 
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections4.Transformer;
 
 import edu.uci.ics.jung.algorithms.layout3d.Layout;
 import edu.uci.ics.jung.algorithms.util.IterativeContext;
@@ -69,7 +69,7 @@ public abstract class LayoutDecorator<V, E> implements Layout<V, E>, IterativeCo
 
 	/**
 	 * @param initializer
-	 * @see edu.uci.ics.jung.algorithms.layout.Layout#setInitializer(org.apache.commons.collections15.Transformer)
+	 * @see edu.uci.ics.jung.algorithms.layout.Layout#setInitializer(org.apache.commons.collections4.Transformer)
 	 */
 	public void setInitializer(Transformer<V, Point3f> initializer) {
 		delegate.setInitializer(initializer);

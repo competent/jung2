@@ -23,8 +23,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.map.LazyMap;
+import org.apache.commons.collections4.Factory;
+import org.apache.commons.collections4.map.LazyMap;
 
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.util.Caching;
@@ -65,7 +65,7 @@ public class PersistentLayoutImpl<V, E> extends ObservableCachingLayout<V,E>
      */
     public PersistentLayoutImpl(Layout<V,E> layout) {
         super(layout);
-        this.map = LazyMap.decorate(new HashMap<V,Point>(), new RandomPointFactory(getSize()));
+        this.map = LazyMap.lazyMap(new HashMap<V,Point>(), new RandomPointFactory(getSize()));
 
         this.dontmove = new HashSet<V>();
     }

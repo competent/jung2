@@ -20,7 +20,7 @@ import java.awt.geom.Point2D;
 
 import javax.swing.ToolTipManager;
 
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections4.Transformer;
 
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.control.GraphMouseListener;

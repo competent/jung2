@@ -20,8 +20,8 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
-import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.functors.MapTransformer;
+import org.apache.commons.collections4.Transformer;
+import org.apache.commons.collections4.functors.MapTransformer;
 
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;

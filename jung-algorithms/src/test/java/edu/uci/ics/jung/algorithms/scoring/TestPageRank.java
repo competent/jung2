@@ -17,8 +17,8 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.functors.MapTransformer;
+import org.apache.commons.collections4.Factory;
+import org.apache.commons.collections4.functors.MapTransformer;
 
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
@@ -64,7 +64,7 @@ public class TestPageRank extends TestCase {
         addEdge(graph,3,1,1.0);
         addEdge(graph,2,1,0.5);
 
-        PageRankWithPriors<Integer, Integer> pr = new PageRank<Integer, Integer>(graph, MapTransformer.getInstance(edgeWeights), 0);
+        PageRankWithPriors<Integer, Integer> pr = new PageRank<Integer, Integer>(graph, MapTransformer.mapTransformer(edgeWeights), 0);
         pr.evaluate();
         
         Assert.assertEquals(pr.getVertexScore(0), 0.0, pr.getTolerance());

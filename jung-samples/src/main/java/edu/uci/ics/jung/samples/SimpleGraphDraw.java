@@ -13,7 +13,7 @@ import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.io.PajekNetReader;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 
-import org.apache.commons.collections15.FactoryUtils;
+import org.apache.commons.collections4.FactoryUtils;
 
 import java.io.IOException;
 

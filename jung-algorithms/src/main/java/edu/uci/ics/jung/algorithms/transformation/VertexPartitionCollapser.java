@@ -15,9 +15,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.functors.MapTransformer;
+import org.apache.commons.collections4.Factory;
+import org.apache.commons.collections4.Transformer;
+import org.apache.commons.collections4.functors.MapTransformer;
 
 import edu.uci.ics.jung.algorithms.blockmodel.VertexPartition;
 import edu.uci.ics.jung.graph.Graph;
@@ -98,6 +98,6 @@ public class VertexPartitionCollapser<V,E,CV,CE>
      */
     public Transformer<Set<V>, CV> getSetToCollapsedVertexTransformer()
     {
-        return MapTransformer.getInstance(set_collapsedv);
+        return MapTransformer.mapTransformer(set_collapsedv);
     }
 }
