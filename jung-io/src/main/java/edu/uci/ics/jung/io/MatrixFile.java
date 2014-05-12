@@ -18,7 +18,7 @@ import cern.colt.matrix.impl.SparseDoubleMatrix2D;
 import edu.uci.ics.jung.algorithms.matrix.GraphMatrixOperations;
 import edu.uci.ics.jung.graph.Graph;
 
-import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections4.Factory;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

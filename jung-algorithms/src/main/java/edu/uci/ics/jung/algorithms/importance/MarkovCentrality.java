@@ -12,8 +12,8 @@ package edu.uci.ics.jung.algorithms.importance;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections15.BidiMap;
-import org.apache.commons.collections15.functors.MapTransformer;
+import org.apache.commons.collections4.BidiMap;
+import org.apache.commons.collections4.functors.MapTransformer;
 
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
@@ -107,7 +107,7 @@ public class MarkovCentrality<V,E> extends RelativeAuthorityRanker<V,E> {
     private DoubleMatrix1D getStationaryDistribution() {
         DoubleMatrix1D piVector = new DenseDoubleMatrix1D(getVertexCount());
         PageRank<V,E> pageRank = new PageRank<V,E>(getGraph(), 
-                MapTransformer.getInstance(getEdgeWeights()), 0);
+                MapTransformer.mapTransformer(getEdgeWeights()), 0);
         pageRank.evaluate();
         
         for (V v : getGraph().getVertices())

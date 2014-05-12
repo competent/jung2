@@ -11,8 +11,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections15.BidiMap;
-import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections4.BidiMap;
+import org.apache.commons.collections4.Factory;
 
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;

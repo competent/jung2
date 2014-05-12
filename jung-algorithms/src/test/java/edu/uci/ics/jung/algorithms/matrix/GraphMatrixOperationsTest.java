@@ -11,7 +11,7 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
-import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections4.Factory;
 
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.impl.SparseDoubleMatrix2D;

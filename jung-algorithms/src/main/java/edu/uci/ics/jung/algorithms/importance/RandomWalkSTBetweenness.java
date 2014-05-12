@@ -9,7 +9,7 @@
  */
 package edu.uci.ics.jung.algorithms.importance;
 
-import org.apache.commons.collections15.BidiMap;
+import org.apache.commons.collections4.BidiMap;
 
 import cern.colt.matrix.DoubleMatrix2D;
 import edu.uci.ics.jung.algorithms.matrix.GraphMatrixOperations;

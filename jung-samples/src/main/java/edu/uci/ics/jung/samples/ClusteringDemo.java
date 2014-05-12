@@ -80,11 +80,11 @@ public class ClusteringDemo extends JApplet {
 //	Factory<Graph<Number,Number>> graphFactory;
 	
 	Map<Number,Paint> vertexPaints = 
-		LazyMap.<Number,Paint>lazyMap(new HashMap<Paint,Number>(),
-				new ConstantTransformer(Color.white));
+		LazyMap.lazyMap(new HashMap<Number,Paint>(),
+				ConstantTransformer.constantTransformer(Color.white));
 	Map<Number,Paint> edgePaints =
-	LazyMap.<Number,Paint>lazyMap(new HashMap<Paint,Number>(),
-			new ConstantTransformer(Color.blue));
+	LazyMap.lazyMap(new HashMap<Number,Paint>(),
+			ConstantTransformer.constantTransformer(Color.blue));
 
 	public final Color[] similarColors =
 	{
